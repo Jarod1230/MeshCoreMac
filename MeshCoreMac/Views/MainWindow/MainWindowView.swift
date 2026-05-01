@@ -4,6 +4,8 @@ import SwiftUI
 struct MainWindowView: View {
     let container: AppContainer
 
+    @State private var dismissedError: String? = nil
+
     var body: some View {
         Group {
             if container.connectionViewModel.connectionState.isConnectedOrReady {
@@ -14,9 +16,20 @@ struct MainWindowView: View {
         }
         .frame(minWidth: 700, minHeight: 500)
         .overlay(alignment: .top) {
-            if let err = container.connectionViewModel.errorMessage {
-                ErrorBannerView(message: err) {}
-                    .animation(.easeInOut, value: err)
+            if let err = container.connectionViewModel.errorMessage,
+               err != dismissedError {
+                ErrorBannerView(
+                    message: err,
+                    onDismiss: { dismissedError = err },
+                    onRetry: { container.connectionViewModel.startScan() }
+                )
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .animation(.easeInOut, value: err)
+            }
+        }
+        .onChange(of: container.connectionViewModel.errorMessage) { _, newError in
+            if newError != dismissedError {
+                dismissedError = nil
             }
         }
     }

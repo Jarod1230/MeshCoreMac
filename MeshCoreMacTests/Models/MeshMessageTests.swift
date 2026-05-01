@@ -3,7 +3,7 @@ import XCTest
 
 final class MeshMessageTests: XCTestCase {
 
-    func testChannelMessage_hasChannelIndex_noContactId() {
+    func testChannelMessage_hasChannelIndex_noContactId() throws {
         let msg = MeshMessage(
             id: UUID(),
             kind: .channel(index: 0),
@@ -19,7 +19,8 @@ final class MeshMessageTests: XCTestCase {
         }
         XCTAssertEqual(idx, 0)
         XCTAssertEqual(msg.routing?.hops, 2)
-        XCTAssertEqual(Double(msg.routing?.snr ?? 0), -8.5, accuracy: 0.001)
+        let snr = try XCTUnwrap(msg.routing?.snr)
+        XCTAssertEqual(snr, -8.5, accuracy: 0.001)
         XCTAssertEqual(msg.routing?.routeDisplay, "via R-7")
     }
 

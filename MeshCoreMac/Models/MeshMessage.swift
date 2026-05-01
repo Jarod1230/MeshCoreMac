@@ -1,6 +1,6 @@
 import Foundation
 
-struct MeshMessage: Identifiable, Sendable {
+struct MeshMessage: Identifiable, Equatable, Sendable {
     let id: UUID
 
     enum Kind: Equatable, Sendable {
@@ -10,7 +10,7 @@ struct MeshMessage: Identifiable, Sendable {
 
     struct Routing: Equatable, Sendable {
         var hops: Int
-        var snr: Float       // dBm, z.B. -8.5
+        var snr: Float       // dB, z.B. -8.5
         var routeDisplay: String?  // z.B. "via R-7"
     }
 

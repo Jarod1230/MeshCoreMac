@@ -28,6 +28,8 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
     // MARK: - Async Frame Stream
     let incomingFrames: AsyncStream<Data>
     private let frameContinuation: AsyncStream<Data>.Continuation
+    let nodeEventStream: AsyncStream<DecodedFrame>
+    private let nodeEventContinuation: AsyncStream<DecodedFrame>.Continuation
 
     // MARK: - CoreBluetooth
     private var centralManager: CBCentralManager!
@@ -48,12 +50,16 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
         let (stream, continuation) = AsyncStream<Data>.makeStream()
         self.incomingFrames = stream
         self.frameContinuation = continuation
+        let (nodeStream, nodeCont) = AsyncStream<DecodedFrame>.makeStream()
+        self.nodeEventStream = nodeStream
+        self.nodeEventContinuation = nodeCont
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
     }
 
     deinit {
         frameContinuation.finish()
+        nodeEventContinuation.finish()
     }
 
     // MARK: - Public API
@@ -250,11 +256,22 @@ extension MeshCoreBluetoothService: @preconcurrency CBPeripheralDelegate {
     ) {
         guard error == nil, let value = characteristic.value else { return }
         frameContinuation.yield(value)
+
+        // Route decoded node events to nodeEventStream (ChatViewModel ignores these via break)
+        if let decoded = try? MeshCoreProtocolService.decodeFrame(value) {
+            switch decoded {
+            case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd:
+                nodeEventContinuation.yield(decoded)
+            case .newChannelMessage, .newDirectMessage, .messageAck:
+                break
+            }
+        }
     }
 
     private func sendInitSequence() {
         try? send(MeshCoreProtocolService.encodeAppStart())
         try? send(MeshCoreProtocolService.encodeDeviceQuery())
+        try? send(MeshCoreProtocolService.encodeGetContacts())
     }
 }
 

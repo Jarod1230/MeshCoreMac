@@ -11,7 +11,10 @@ import Foundation
 protocol BluetoothServiceProtocol: AnyObject {
     var connectionState: ConnectionState { get }
     var discoveredDevices: [CBPeripheral] { get }
+    /// Rohe BLE-Frames (Node → App). ChatViewModel konsumiert diesen Stream.
     var incomingFrames: AsyncStream<Data> { get }
+    /// Dekodierte Node-Ereignisse: selfInfo, nodeAdvert, contact, contactsStart/End.
+    var nodeEventStream: AsyncStream<DecodedFrame> { get }
 
     func startScanning()
     func stopScanning()

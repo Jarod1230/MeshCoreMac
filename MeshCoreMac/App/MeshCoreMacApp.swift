@@ -2,6 +2,7 @@
 import SwiftUI
 
 @main
+@MainActor
 struct MeshCoreMacApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
@@ -41,9 +42,14 @@ struct MeshCoreMacApp: App {
 
     private var menuBarIcon: String {
         switch container.connectionViewModel.connectionState {
-        case .ready:                               return "antenna.radiowaves.left.and.right.circle.fill"
-        case .scanning, .connecting, .connected:   return "antenna.radiowaves.left.and.right.circle"
-        default:                                   return "antenna.radiowaves.left.and.right.slash"
+        case .ready:
+            return "antenna.radiowaves.left.and.right.circle.fill"
+        case .scanning, .connecting, .connected:
+            return "antenna.radiowaves.left.and.right.circle"
+        case .disconnected:
+            return "antenna.radiowaves.left.and.right.slash"
+        case .failed:
+            return "exclamationmark.triangle"
         }
     }
 }

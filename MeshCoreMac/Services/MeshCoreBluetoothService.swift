@@ -39,7 +39,7 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
 
     // MARK: - Reconnect
     private var lastKnownPeripheralId: UUID?
-    private var reconnectTask: Task<Void, Never>?
+    nonisolated(unsafe) private var reconnectTask: Task<Void, Never>?
 
     // MARK: - Konstanten
     private static let lastPeripheralIdKey = "lastPeripheralId"
@@ -58,6 +58,7 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
     }
 
     deinit {
+        reconnectTask?.cancel()
         frameContinuation.finish()
         nodeEventContinuation.finish()
     }

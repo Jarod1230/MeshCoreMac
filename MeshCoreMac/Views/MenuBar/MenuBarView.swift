@@ -13,12 +13,19 @@ struct MenuBarView: View {
 
         Divider()
 
-        Text("Keine neuen Nachrichten")
+        Text("Letzte Nachrichten")
+            .font(.caption)
             .foregroundStyle(.secondary)
+        Text("— keine neuen —")
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
 
         Divider()
 
         Button("Fenster öffnen") { openWindow() }
+
+        Button("Diagnose / Event-Log") {}
+            .disabled(true)  // wird in Task 12 implementiert
 
         Button("Verbindung trennen") {
             container.connectionViewModel.disconnect()
@@ -46,7 +53,7 @@ struct MenuBarView: View {
         case .ready:                             return .green
         case .scanning, .connecting, .connected: return .yellow
         case .disconnected:                      return .red
-        case .failed:                            return .orange
+        case .failed:                            return .red
         }
     }
 }

@@ -15,6 +15,7 @@ final class ContactsViewModel {
     nonisolated(unsafe) private var listenerTask: Task<Void, Never>?
     private var pendingContacts: [MeshContact] = []
     private var collectingContacts = false
+    private var started = false
 
     init(contactStore: ContactStore, bluetoothService: any BluetoothServiceProtocol) {
         self.contactStore = contactStore
@@ -22,6 +23,8 @@ final class ContactsViewModel {
     }
 
     func start() async {
+        guard !started else { return }
+        started = true
         contacts = (try? await contactStore.fetchAll()) ?? []
         startListening()
     }

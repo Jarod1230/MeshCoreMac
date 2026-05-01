@@ -91,6 +91,50 @@ final class ContactsViewModelTests: XCTestCase {
         XCTAssertEqual(vm.contacts.first?.name, "Dave Updated")
     }
 
+    func testStart_calledTwice_doesNotOverwriteLiveContacts() async throws {
+        mockBluetooth.simulateNodeEvent(
+            .nodeAdvert(contactId: "a1b2c3d4", name: "Alice", lat: nil, lon: nil)
+        )
+        try await waitUntil { !self.vm.contacts.isEmpty }
+        XCTAssertEqual(vm.contacts.count, 1)
+
+        await vm.start()
+        XCTAssertEqual(vm.contacts.count, 1, "Second start() call must be a no-op")
+    }
+
+    func testContactsEnd_withoutStart_isNoOp() async throws {
+        let contact = MeshContact(id: "a1b2c3d4", name: "Alice",
+                                   lastSeen: nil, isOnline: true,
+                                   lat: nil, lon: nil)
+        mockBluetooth.simulateNodeEvent(.contact(contact))
+        try await waitUntil { !self.vm.contacts.isEmpty }
+        XCTAssertEqual(vm.contacts.count, 1)
+
+        mockBluetooth.simulateNodeEvent(.contactsEnd)
+        try await Task.sleep(for: .milliseconds(20))
+        XCTAssertEqual(vm.contacts.count, 1, "contactsEnd without contactsStart must not clear contacts")
+    }
+
+    func testContactsStart_twice_resetsBuffer() async throws {
+        mockBluetooth.simulateNodeEvent(.contactsStart)
+        let c1 = MeshContact(id: "a1b2c3d4", name: "Alice",
+                              lastSeen: nil, isOnline: true, lat: nil, lon: nil)
+        mockBluetooth.simulateNodeEvent(.contact(c1))
+        try await Task.sleep(for: .milliseconds(20))
+
+        mockBluetooth.simulateNodeEvent(.contactsStart)
+        let c2 = MeshContact(id: "b2c3d4e5", name: "Bob",
+                              lastSeen: nil, isOnline: true, lat: nil, lon: nil)
+        mockBluetooth.simulateNodeEvent(.contact(c2))
+        mockBluetooth.simulateNodeEvent(.contactsEnd)
+        try await waitUntil { self.vm.contacts.contains(where: { $0.id == "b2c3d4e5" }) }
+
+        XCTAssertFalse(vm.contacts.contains(where: { $0.id == "a1b2c3d4" }),
+                       "Second contactsStart must discard first buffer (Alice not persisted yet)")
+        XCTAssertTrue(vm.contacts.contains(where: { $0.id == "b2c3d4e5" }),
+                      "Bob from second sequence must be present")
+    }
+
     // MARK: - Helper
 
     private func waitUntil(

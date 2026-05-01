@@ -55,8 +55,8 @@ struct MainWindowView: View {
             .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
         } detail: {
             if let conversation = container.sidebarViewModel.selectedConversation {
-                ChatView(
-                    chatVM: container.makeChatViewModel(for: conversation),
+                ChatContainer(
+                    container: container,
                     conversation: conversation,
                     contactsVM: container.contactsViewModel
                 )
@@ -86,5 +86,28 @@ private struct MapSheetContent: View {
     let contactsVM: ContactsViewModel
     var body: some View {
         NodeMapView(contacts: contactsVM.contacts, ownPosition: contactsVM.ownPosition)
+    }
+}
+
+// Holds a stable ChatViewModel per conversation via @State, preventing
+// re-creation on every MainWindowView body re-render.
+private struct ChatContainer: View {
+    let container: AppContainer
+    let conversation: MeshMessage.Kind
+    let contactsVM: ContactsViewModel
+
+    @State private var chatVM: ChatViewModel?
+
+    var body: some View {
+        Group {
+            if let chatVM {
+                ChatView(chatVM: chatVM, conversation: conversation, contactsVM: contactsVM)
+            } else {
+                ProgressView()
+            }
+        }
+        .task(id: conversation) {
+            chatVM = container.makeChatViewModel(for: conversation)
+        }
     }
 }

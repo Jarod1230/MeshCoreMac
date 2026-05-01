@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E617710ECB95FE7AC5FAF49 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B647C2A265D4FE03D49FFAAC /* NotificationService.swift */; };
 		16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */; };
 		1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */; };
 		448C88E05CE4B31F44934165 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */; };
 		497B9FA1A2C2855CD6B81DAE /* MeshCoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */; };
 		4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */; };
+		4FC0F78991F6699AF141F6F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */; };
 		52354C51ADAF63656EE518FC /* BluetoothServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB1294F545A99E8FF503052 /* BluetoothServiceProtocol.swift */; };
 		5B7087A53374ADC39A994499 /* MessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36286B542A2D72477F42748F /* MessageStoreTests.swift */; };
 		61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */; };
@@ -19,11 +21,17 @@
 		6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */; };
 		84577897A1DE59F1786EFA77 /* MeshCoreBluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06738DDC341C7E858E03AD8B /* MeshCoreBluetoothService.swift */; };
 		8A8C416FD816DC23E430844B /* MeshChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F252B6593A207542FC33F629 /* MeshChannel.swift */; };
+		8CE40DD49787024B9A2C01BE /* ChatViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */; };
+		8D948FBADC80AFD85B20AD8C /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */; };
 		94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */; };
 		AA1691906E930CCFB8E96340 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 91D91B89374E00550EFAB2A3 /* GRDB */; };
+		AC4A633C040DAD6F76E8AC75 /* ConnectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */; };
 		B082CBD02C7FE6CAC1A07A42 /* MockBluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931A0F8508374D9F68718655 /* MockBluetoothService.swift */; };
 		B551983ED848D109C61593DB /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */; };
+		B87EA3B4DFB49690D8E5BCEF /* SidebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */; };
+		DDD3C9980E838614D35AD6D9 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676154334E1F0D348D97CD08 /* ChatViewModel.swift */; };
 		E7ECB5EEE19A6878C6557A1E /* MeshCoreProtocolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */; };
+		ECB2D3B0ADB8B5B237A6FFE5 /* ConnectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,18 +52,26 @@
 		36286B542A2D72477F42748F /* MessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreTests.swift; sourceTree = "<group>"; };
 		3DE3C73499500C29A157C3EE /* MeshCoreMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeshCoreMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocolServiceTests.swift; sourceTree = "<group>"; };
+		439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModelTests.swift; sourceTree = "<group>"; };
 		5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeshCoreMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
+		676154334E1F0D348D97CD08 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
+		6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreRecord.swift; sourceTree = "<group>"; };
 		7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocol.swift; sourceTree = "<group>"; };
 		7FB1294F545A99E8FF503052 /* BluetoothServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothServiceProtocol.swift; sourceTree = "<group>"; };
+		86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessage.swift; sourceTree = "<group>"; };
 		931A0F8508374D9F68718655 /* MockBluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBluetoothService.swift; sourceTree = "<group>"; };
 		960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacApp.swift; sourceTree = "<group>"; };
 		9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageTests.swift; sourceTree = "<group>"; };
+		9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModelTests.swift; sourceTree = "<group>"; };
 		A271D0E9D5233362DEE0C700 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B647C2A265D4FE03D49FFAAC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C1161B50A49EB13D5F04A483 /* MeshContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshContact.swift; sourceTree = "<group>"; };
 		F252B6593A207542FC33F629 /* MeshChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshChannel.swift; sourceTree = "<group>"; };
+		FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,9 +100,19 @@
 				90CFAF48290168D35BC55305 /* App */,
 				3F4DD8105D51C4F35B2D947B /* Models */,
 				316CEEC4B6AC648166A12342 /* Services */,
+				90E1CB1CEFFA72883D99E12E /* ViewModels */,
 				14FD5D8CD22CBB91BAA28F52 /* Views */,
 			);
 			path = MeshCoreMac;
+			sourceTree = "<group>";
+		};
+		30F13D25578AAD5D800EB5DE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */,
+				9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		316CEEC4B6AC648166A12342 /* Services */ = {
@@ -143,9 +169,22 @@
 		90CFAF48290168D35BC55305 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */,
+				6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */,
 				960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */,
+				B647C2A265D4FE03D49FFAAC /* NotificationService.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		90E1CB1CEFFA72883D99E12E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				676154334E1F0D348D97CD08 /* ChatViewModel.swift */,
+				6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */,
+				FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		9C3EBC1E04D207B00101EC98 /* MeshCoreMacTests */ = {
@@ -154,6 +193,7 @@
 				183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */,
 				69500D80E35C1732093A839C /* Models */,
 				6C43BC4EEDAC3A083A914F91 /* Services */,
+				30F13D25578AAD5D800EB5DE /* ViewModels */,
 			);
 			path = MeshCoreMacTests;
 			sourceTree = "<group>";
@@ -246,6 +286,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CE40DD49787024B9A2C01BE /* ChatViewModelTests.swift in Sources */,
+				AC4A633C040DAD6F76E8AC75 /* ConnectionViewModelTests.swift in Sources */,
 				16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */,
 				61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */,
 				4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */,
@@ -258,8 +300,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D948FBADC80AFD85B20AD8C /* AppContainer.swift in Sources */,
+				4FC0F78991F6699AF141F6F6 /* AppDelegate.swift in Sources */,
 				52354C51ADAF63656EE518FC /* BluetoothServiceProtocol.swift in Sources */,
+				DDD3C9980E838614D35AD6D9 /* ChatViewModel.swift in Sources */,
 				448C88E05CE4B31F44934165 /* ConnectionState.swift in Sources */,
+				ECB2D3B0ADB8B5B237A6FFE5 /* ConnectionViewModel.swift in Sources */,
 				8A8C416FD816DC23E430844B /* MeshChannel.swift in Sources */,
 				6A307B45767CCFC5C849E768 /* MeshContact.swift in Sources */,
 				84577897A1DE59F1786EFA77 /* MeshCoreBluetoothService.swift in Sources */,
@@ -269,6 +315,8 @@
 				6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */,
 				B551983ED848D109C61593DB /* MessageStore.swift in Sources */,
 				1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */,
+				0E617710ECB95FE7AC5FAF49 /* NotificationService.swift in Sources */,
+				B87EA3B4DFB49690D8E5BCEF /* SidebarViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,7 +14,8 @@ final class ChatViewModelTests: XCTestCase {
         vm = ChatViewModel(
             bluetoothService: mockBluetooth,
             messageStore: store,
-            conversation: .channel(index: 0)
+            conversation: .channel(index: 0),
+            notificationService: NotificationService()
         )
     }
 

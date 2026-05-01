@@ -21,7 +21,8 @@ final class AppContainer {
         ChatViewModel(
             bluetoothService: bluetoothService,
             messageStore: messageStore,
-            conversation: conversation
+            conversation: conversation,
+            notificationService: notificationService
         )
     }
 }

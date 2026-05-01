@@ -24,9 +24,10 @@ struct MainWindowView: View {
             .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
         } detail: {
             if let conversation = container.sidebarViewModel.selectedConversation {
-                // Platzhalter — wird in Task 11 durch ChatView ersetzt
-                Text("Chat für \(conversationTitle(conversation))")
-                    .foregroundStyle(.secondary)
+                ChatView(
+                    chatVM: container.makeChatViewModel(for: conversation),
+                    conversation: conversation
+                )
             } else {
                 ContentUnavailableView(
                     "Keine Konversation gewählt",
@@ -37,10 +38,4 @@ struct MainWindowView: View {
         }
     }
 
-    private func conversationTitle(_ kind: MeshMessage.Kind) -> String {
-        switch kind {
-        case .channel(let idx): return "Kanal \(idx)"
-        case .direct(let id):   return "DM \(id)"
-        }
-    }
 }

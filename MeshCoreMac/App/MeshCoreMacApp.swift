@@ -30,14 +30,16 @@ struct MeshCoreMacApp: App {
         }
 
         MenuBarExtra("MeshCoreMac", systemImage: menuBarIcon) {
-            // Platzhalter — wird in Task 8 durch MenuBarView ersetzt
-            Button("Fenster öffnen") {
-                NSApp.setActivationPolicy(.regular)
-                NSApp.activate(ignoringOtherApps: true)
-            }
-            Divider()
-            Button("Beenden") { NSApplication.shared.terminate(nil) }
+            MenuBarView(
+                container: container,
+                openWindow: openMainWindow
+            )
         }
+    }
+
+    private func openMainWindow() {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     private var menuBarIcon: String {

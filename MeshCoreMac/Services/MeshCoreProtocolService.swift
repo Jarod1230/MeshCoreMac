@@ -77,10 +77,14 @@ enum MeshCoreProtocolService {
                 return try decodeContactMessage(payload)
             case .sent:
                 return try decodeMsgAck(payload)
-            default:
+            case .ok, .err, .contactsStart, .contact, .endOfContacts,
+                 .currTime, .noMoreMessages, .battAndStorage:
                 throw ProtocolError.unknownCommand(commandByte)
             }
         }
+
+        // VERIFY Task 5: ResponseV3 (0x10, 0x11) dispatch deferred — V3 frames
+        // currently rejected with unknownCommand until real firmware frames are tested
 
         // Push-Notifications
         if let push = MeshCoreProtocol.Push(rawValue: commandByte) {
@@ -89,7 +93,7 @@ enum MeshCoreProtocolService {
                 return try decodeMsgAck(payload)
             case .advert, .pathUpdated:
                 return try decodeNodeStatusFromAdvert(payload, isOnline: true)
-            default:
+            case .msgWaiting, .rawData, .loginSuccess, .loginFail, .statusResponse:
                 throw ProtocolError.unknownCommand(commandByte)
             }
         }
@@ -103,7 +107,7 @@ enum MeshCoreProtocolService {
     /// Echtes Spec-Format ist deutlich größer (32-Byte pubkey, lat/lon, etc.).
     /// VERIFY: Vor Task 5 gegen reale Firmware-Frames abgleichen.
     private static func decodeDeviceInfo(_ payload: Data) throws -> DecodedFrame {
-        guard payload.count >= 2 else {
+        guard payload.count >= 4 else {
             throw ProtocolError.invalidPayload("DEVICE_INFO payload zu kurz")
         }
         let nodeId = payload.prefix(4).map { String(format: "%02x", $0) }.joined()

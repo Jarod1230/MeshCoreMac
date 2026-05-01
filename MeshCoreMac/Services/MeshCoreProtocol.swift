@@ -58,7 +58,6 @@ enum MeshCoreProtocol {
         // VERIFY: Echtes V3-Frame-Format weicht ab; siehe DecodedFrame.
         static var newMsg: Response { .channelMsgRecv }
         static var msgAck: Response { .sent }              // Sent-Confirmation
-        static var nodeStatus: Response { .deviceInfo }
     }
 
     // MARK: - V3-Responses mit SNR

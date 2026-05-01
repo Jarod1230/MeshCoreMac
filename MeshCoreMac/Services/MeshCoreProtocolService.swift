@@ -15,10 +15,12 @@ enum MeshCoreProtocolService {
     // MARK: - Encoder
 
     static func encodeAppStart() -> Data {
+        // VERIFY: Minimal-Frame. Echtes Spec-Format: [0x01][app_ver][reserved×6][app_name UTF-8].
         Data([MeshCoreProtocol.Command.appStart.rawValue])
     }
 
     static func encodeDeviceQuery() -> Data {
+        // VERIFY: Minimal-Frame. Echtes Spec-Format: [0x16][app_target_ver].
         Data([MeshCoreProtocol.Command.deviceQuery.rawValue])
     }
 
@@ -37,6 +39,8 @@ enum MeshCoreProtocolService {
         guard textData.count <= MeshCoreProtocol.maxMessageLength else {
             throw ProtocolError.messageTooLong(textData.count)
         }
+        // VERIFY: Echtes CMD_SEND_CHANNEL_TXT_MSG (0x03) enthält zusätzlich Timestamp und 0x00-Padding.
+        // DM-Format benötigt 6-Byte pubkey-Prefix für Recipient-Adressierung (Phase 2+).
         var frame = Data([MeshCoreProtocol.Command.sendTxtMsg.rawValue, channelIndex])
         frame.append(textData)
         return frame
@@ -76,7 +80,7 @@ enum MeshCoreProtocolService {
             case .sendConfirmed:
                 return try decodeMsgAck(payload)
             case .advert, .pathUpdated:
-                return try decodeAdvertOrSelfInfo(payload)
+                return try decodeNodeAdvertPush(payload)
             case .msgWaiting, .rawData, .loginSuccess, .loginFail, .statusResponse:
                 throw ProtocolError.unknownCommand(commandByte)
             }
@@ -116,7 +120,7 @@ enum MeshCoreProtocolService {
 
     /// Dekodiert ADVERT (0x80) und PATH_UPDATED (0x81) Push-Notifications.
     /// Format: [pubkey:32][ts:4][lat_f32_le:4][lon_f32_le:4][alt_f32_le:4][name:variable]
-    private static func decodeAdvertOrSelfInfo(_ payload: Data) throws -> DecodedFrame {
+    private static func decodeNodeAdvertPush(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 4 else {
             throw ProtocolError.invalidPayload("ADVERT payload zu kurz")

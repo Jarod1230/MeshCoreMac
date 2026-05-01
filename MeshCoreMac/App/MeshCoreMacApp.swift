@@ -20,6 +20,7 @@ struct MeshCoreMacApp: App {
     var body: some Scene {
         WindowGroup {
             MainWindowView(container: container)
+                .task { await container.contactsViewModel.start() }
                 .onDisappear {
                     appDelegate.switchToAccessoryMode()
                 }

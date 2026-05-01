@@ -5,4 +5,6 @@ struct MeshContact: Identifiable, Hashable, Sendable {
     var name: String
     var lastSeen: Date?
     var isOnline: Bool
+    var lat: Double?
+    var lon: Double?
 }

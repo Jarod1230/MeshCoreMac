@@ -6,7 +6,6 @@ import Observation
 @Observable
 final class SidebarViewModel {
     var channels: [MeshChannel] = []
-    var contacts: [MeshContact] = []
     var selectedConversation: MeshMessage.Kind? = nil
 
     init() {
@@ -20,14 +19,6 @@ final class SidebarViewModel {
     func addChannel(_ channel: MeshChannel) {
         if !channels.contains(channel) {
             channels.append(channel)
-        }
-    }
-
-    func updateContact(_ contact: MeshContact) {
-        if let idx = contacts.firstIndex(where: { $0.id == contact.id }) {
-            contacts[idx] = contact
-        } else {
-            contacts.append(contact)
         }
     }
 

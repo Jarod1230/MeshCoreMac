@@ -5,6 +5,7 @@ struct MainWindowView: View {
     let container: AppContainer
 
     @State private var dismissedError: String? = nil
+    @State private var showingMap = false
 
     var body: some View {
         Group {
@@ -32,20 +33,32 @@ struct MainWindowView: View {
                 dismissedError = nil
             }
         }
+        .sheet(isPresented: $showingMap) {
+            NavigationStack {
+                MapSheetContent(contactsVM: container.contactsViewModel)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Schließen") { showingMap = false }
+                        }
+                    }
+            }
+        }
     }
 
     private var messengerView: some View {
         NavigationSplitView {
             SidebarView(
                 sidebarVM: container.sidebarViewModel,
-                connectionVM: container.connectionViewModel
+                connectionVM: container.connectionViewModel,
+                contactsVM: container.contactsViewModel
             )
             .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)
         } detail: {
             if let conversation = container.sidebarViewModel.selectedConversation {
-                ChatView(
-                    chatVM: container.makeChatViewModel(for: conversation),
-                    conversation: conversation
+                ChatContainer(
+                    container: container,
+                    conversation: conversation,
+                    contactsVM: container.contactsViewModel
                 )
             } else {
                 ContentUnavailableView(
@@ -55,6 +68,46 @@ struct MainWindowView: View {
                 )
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingMap = true
+                } label: {
+                    Label("Karte", systemImage: "map")
+                }
+                .help("Karte aller bekannten Nodes anzeigen")
+            }
+        }
     }
+}
 
+// Observes ContactsViewModel directly so NodeMapView updates reactively.
+private struct MapSheetContent: View {
+    let contactsVM: ContactsViewModel
+    var body: some View {
+        NodeMapView(contacts: contactsVM.contacts, ownPosition: contactsVM.ownPosition)
+    }
+}
+
+// Holds a stable ChatViewModel per conversation via @State, preventing
+// re-creation on every MainWindowView body re-render.
+private struct ChatContainer: View {
+    let container: AppContainer
+    let conversation: MeshMessage.Kind
+    let contactsVM: ContactsViewModel
+
+    @State private var chatVM: ChatViewModel?
+
+    var body: some View {
+        Group {
+            if let chatVM {
+                ChatView(chatVM: chatVM, conversation: conversation, contactsVM: contactsVM)
+            } else {
+                ProgressView()
+            }
+        }
+        .task(id: conversation) {
+            chatVM = container.makeChatViewModel(for: conversation)
+        }
+    }
 }

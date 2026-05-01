@@ -15,6 +15,8 @@ final class MockBluetoothService: BluetoothServiceProtocol {
     var discoveredDevices: [CBPeripheral] = []
     let incomingFrames: AsyncStream<Data>
     private let frameContinuation: AsyncStream<Data>.Continuation
+    let nodeEventStream: AsyncStream<DecodedFrame>
+    private let nodeEventContinuation: AsyncStream<DecodedFrame>.Continuation
 
     var sentFrames: [Data] = []
     var scanStarted = false
@@ -24,6 +26,9 @@ final class MockBluetoothService: BluetoothServiceProtocol {
         let (stream, continuation) = AsyncStream<Data>.makeStream()
         self.incomingFrames = stream
         self.frameContinuation = continuation
+        let (nodeStream, nodeCont) = AsyncStream<DecodedFrame>.makeStream()
+        self.nodeEventStream = nodeStream
+        self.nodeEventContinuation = nodeCont
     }
 
     func startScanning() { scanStarted = true }
@@ -45,6 +50,10 @@ final class MockBluetoothService: BluetoothServiceProtocol {
 
     func simulateIncomingFrame(_ data: Data) {
         frameContinuation.yield(data)
+    }
+
+    func simulateNodeEvent(_ frame: DecodedFrame) {
+        nodeEventContinuation.yield(frame)
     }
 
     func simulateDisconnect() {

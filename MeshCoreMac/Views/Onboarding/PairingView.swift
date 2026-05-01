@@ -50,6 +50,7 @@ struct PairingView: View {
                     Label("Suchen", systemImage: "arrow.clockwise")
                 }
                 .buttonStyle(.bordered)
+                .disabled(connectionVM.connectionState == .scanning)
 
                 if case .scanning = connectionVM.connectionState {
                     ProgressView()

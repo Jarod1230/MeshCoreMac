@@ -120,10 +120,7 @@ final class ChatViewModel {
                     )
                 }
 
-            case .deviceInfo:
-                break
-
-            case .nodeStatus:
+            case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd:
                 break
             }
         } catch {

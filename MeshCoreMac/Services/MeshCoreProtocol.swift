@@ -96,11 +96,19 @@ enum MeshCoreProtocol {
 
 /// Strukturiertes Ergebnis nach erfolgreichem Frame-Decode.
 enum DecodedFrame: Sendable, Equatable {
-    case deviceInfo(nodeId: String, firmwareVersion: String)
+    /// Eigene Node-Info mit optionaler GPS-Position (SELF_INFO 0x05, DEVICE_INFO 0x0D).
+    case selfInfo(nodeId: String, lat: Double?, lon: Double?, firmware: String)
     case newChannelMessage(MeshMessage)
     case newDirectMessage(MeshMessage)
     case messageAck(messageId: String)
-    case nodeStatus(contactId: String, isOnline: Bool)
+    /// Werbung eines anderen Nodes mit optionaler Position (ADVERT 0x80, PATH_UPDATED 0x81).
+    case nodeAdvert(contactId: String, name: String?, lat: Double?, lon: Double?)
+    /// Ein Kontakt aus der GET_CONTACTS-Antwort-Sequenz (CONTACT 0x03).
+    case contact(MeshContact)
+    /// Startsignal der GET_CONTACTS-Antwort (CONTACTS_START 0x02).
+    case contactsStart
+    /// Endsignal der GET_CONTACTS-Antwort (END_OF_CONTACTS 0x04).
+    case contactsEnd
 }
 
 // MARK: - Fehler

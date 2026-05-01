@@ -1,3 +1,4 @@
+// MeshCoreMac/Services/ContactStore.swift
 import GRDB
 import Foundation
 
@@ -26,6 +27,7 @@ final class ContactStore: Sendable {
         try runMigrations()
     }
 
+    // MARK: - Migrations
     private func runMigrations() throws {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("v1_create_contacts") { db in
@@ -41,6 +43,7 @@ final class ContactStore: Sendable {
         try migrator.migrate(dbQueue)
     }
 
+    // MARK: - Write
     func save(_ contact: MeshContact) async throws {
         let record = ContactRecord(from: contact)
         try await dbQueue.write { db in
@@ -48,6 +51,7 @@ final class ContactStore: Sendable {
         }
     }
 
+    // MARK: - Read
     func fetchAll() async throws -> [MeshContact] {
         try await dbQueue.read { db in
             try ContactRecord.fetchAll(db).map { $0.toMeshContact() }

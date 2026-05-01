@@ -34,6 +34,7 @@ final class ContactStoreTests: XCTestCase {
         XCTAssertEqual(all.count, 1)
         XCTAssertEqual(all[0].name, "Bob Updated")
         XCTAssertEqual(all[0].lat ?? 0, 52.52, accuracy: 0.001)
+        XCTAssertTrue(all[0].isOnline)
     }
 
     func testFetchById_returnsNilForMissing() async throws {

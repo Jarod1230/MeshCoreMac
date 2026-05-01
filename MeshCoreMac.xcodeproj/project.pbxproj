@@ -1,0 +1,657 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E617710ECB95FE7AC5FAF49 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B647C2A265D4FE03D49FFAAC /* NotificationService.swift */; };
+		16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */; };
+		1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */; };
+		25BFD0400337844A44EABC45 /* MainWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 393807736FFBD890E13612F1 /* MainWindowView.swift */; };
+		2D7CB194243320D0528434A1 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407C25969742DD6C873C36BF /* ChatView.swift */; };
+		448C88E05CE4B31F44934165 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */; };
+		497B9FA1A2C2855CD6B81DAE /* MeshCoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */; };
+		4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */; };
+		4FC0F78991F6699AF141F6F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */; };
+		52354C51ADAF63656EE518FC /* BluetoothServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB1294F545A99E8FF503052 /* BluetoothServiceProtocol.swift */; };
+		5B7087A53374ADC39A994499 /* MessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36286B542A2D72477F42748F /* MessageStoreTests.swift */; };
+		61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */; };
+		6A1D9AF51D03ECFC4F90028C /* ErrorBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6C81B43033D2A05BB6D457 /* ErrorBannerView.swift */; };
+		6A307B45767CCFC5C849E768 /* MeshContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1161B50A49EB13D5F04A483 /* MeshContact.swift */; };
+		6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */; };
+		70B9FBE6B5E048DAC14725DD /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56461D95B5FDDE0284D51808 /* SidebarView.swift */; };
+		84577897A1DE59F1786EFA77 /* MeshCoreBluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06738DDC341C7E858E03AD8B /* MeshCoreBluetoothService.swift */; };
+		85BC5BE5669E035D5503038A /* PairingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABAF7CE52BB05ECC17BB6A9 /* PairingView.swift */; };
+		8A8C416FD816DC23E430844B /* MeshChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F252B6593A207542FC33F629 /* MeshChannel.swift */; };
+		8CE40DD49787024B9A2C01BE /* ChatViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */; };
+		8D948FBADC80AFD85B20AD8C /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */; };
+		94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */; };
+		AA1691906E930CCFB8E96340 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 91D91B89374E00550EFAB2A3 /* GRDB */; };
+		AC4A633C040DAD6F76E8AC75 /* ConnectionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */; };
+		B082CBD02C7FE6CAC1A07A42 /* MockBluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931A0F8508374D9F68718655 /* MockBluetoothService.swift */; };
+		B551983ED848D109C61593DB /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */; };
+		B87EA3B4DFB49690D8E5BCEF /* SidebarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */; };
+		C5FBF3C2437BD08E8CD28986 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95928FC45C3091FB70054481 /* MessageBubbleView.swift */; };
+		D83FB62AFAB41BC9C0A565E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE90A4A21ED0FCBEF6033B11 /* SettingsView.swift */; };
+		DDD3C9980E838614D35AD6D9 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676154334E1F0D348D97CD08 /* ChatViewModel.swift */; };
+		E7ECB5EEE19A6878C6557A1E /* MeshCoreProtocolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */; };
+		ECB2D3B0ADB8B5B237A6FFE5 /* ConnectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */; };
+		F9766A2FC5CAF84FFCB2C515 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309622427679B6678DB85655 /* MenuBarView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		338497B47B297DC09F3BA734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8279B148C01D359F3F817002 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C9BF7ACB3B70805DEC054B7;
+			remoteInfo = MeshCoreMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		06738DDC341C7E858E03AD8B /* MeshCoreBluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreBluetoothService.swift; sourceTree = "<group>"; };
+		0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionState.swift; sourceTree = "<group>"; };
+		16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocolService.swift; sourceTree = "<group>"; };
+		183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacTests.swift; sourceTree = "<group>"; };
+		309622427679B6678DB85655 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		36286B542A2D72477F42748F /* MessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreTests.swift; sourceTree = "<group>"; };
+		393807736FFBD890E13612F1 /* MainWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowView.swift; sourceTree = "<group>"; };
+		3DE3C73499500C29A157C3EE /* MeshCoreMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeshCoreMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		407C25969742DD6C873C36BF /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocolServiceTests.swift; sourceTree = "<group>"; };
+		439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModelTests.swift; sourceTree = "<group>"; };
+		4ABAF7CE52BB05ECC17BB6A9 /* PairingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingView.swift; sourceTree = "<group>"; };
+		56461D95B5FDDE0284D51808 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeshCoreMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
+		676154334E1F0D348D97CD08 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModel.swift; sourceTree = "<group>"; };
+		6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreRecord.swift; sourceTree = "<group>"; };
+		7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocol.swift; sourceTree = "<group>"; };
+		7FB1294F545A99E8FF503052 /* BluetoothServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothServiceProtocol.swift; sourceTree = "<group>"; };
+		86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessage.swift; sourceTree = "<group>"; };
+		931A0F8508374D9F68718655 /* MockBluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBluetoothService.swift; sourceTree = "<group>"; };
+		95928FC45C3091FB70054481 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
+		960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacApp.swift; sourceTree = "<group>"; };
+		9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessageTests.swift; sourceTree = "<group>"; };
+		9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionViewModelTests.swift; sourceTree = "<group>"; };
+		A271D0E9D5233362DEE0C700 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B647C2A265D4FE03D49FFAAC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		C1161B50A49EB13D5F04A483 /* MeshContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshContact.swift; sourceTree = "<group>"; };
+		CE90A4A21ED0FCBEF6033B11 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F252B6593A207542FC33F629 /* MeshChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshChannel.swift; sourceTree = "<group>"; };
+		FC6C81B43033D2A05BB6D457 /* ErrorBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBannerView.swift; sourceTree = "<group>"; };
+		FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A8B470D2B6B4EC71F2EC4A43 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA1691906E930CCFB8E96340 /* GRDB in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		14FD5D8CD22CBB91BAA28F52 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				665E3190BA543995976629C8 /* MainWindow */,
+				C0471FDA3543887D49D4C5DF /* MenuBar */,
+				77F0115D6ACC05BE0A283719 /* Onboarding */,
+				4831A231D1155621ACD2DA24 /* Settings */,
+				2FBC050B92C74219A24A557B /* Shared */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2133EFE12EE74727EAC5A661 /* MeshCoreMac */ = {
+			isa = PBXGroup;
+			children = (
+				A271D0E9D5233362DEE0C700 /* Info.plist */,
+				90CFAF48290168D35BC55305 /* App */,
+				3F4DD8105D51C4F35B2D947B /* Models */,
+				316CEEC4B6AC648166A12342 /* Services */,
+				90E1CB1CEFFA72883D99E12E /* ViewModels */,
+				14FD5D8CD22CBB91BAA28F52 /* Views */,
+			);
+			path = MeshCoreMac;
+			sourceTree = "<group>";
+		};
+		2FBC050B92C74219A24A557B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FC6C81B43033D2A05BB6D457 /* ErrorBannerView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		30F13D25578AAD5D800EB5DE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				439ED5DEA759FE234D8E52EB /* ChatViewModelTests.swift */,
+				9EB62BCAAF2AB404A352DEB9 /* ConnectionViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		316CEEC4B6AC648166A12342 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7FB1294F545A99E8FF503052 /* BluetoothServiceProtocol.swift */,
+				06738DDC341C7E858E03AD8B /* MeshCoreBluetoothService.swift */,
+				7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */,
+				16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */,
+				6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */,
+				70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		33DB986D7DA697C122849240 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DE3C73499500C29A157C3EE /* MeshCoreMac.app */,
+				5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3F4DD8105D51C4F35B2D947B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */,
+				F252B6593A207542FC33F629 /* MeshChannel.swift */,
+				C1161B50A49EB13D5F04A483 /* MeshContact.swift */,
+				8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4831A231D1155621ACD2DA24 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CE90A4A21ED0FCBEF6033B11 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		665E3190BA543995976629C8 /* MainWindow */ = {
+			isa = PBXGroup;
+			children = (
+				407C25969742DD6C873C36BF /* ChatView.swift */,
+				393807736FFBD890E13612F1 /* MainWindowView.swift */,
+				95928FC45C3091FB70054481 /* MessageBubbleView.swift */,
+				56461D95B5FDDE0284D51808 /* SidebarView.swift */,
+			);
+			path = MainWindow;
+			sourceTree = "<group>";
+		};
+		69500D80E35C1732093A839C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6C43BC4EEDAC3A083A914F91 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */,
+				36286B542A2D72477F42748F /* MessageStoreTests.swift */,
+				931A0F8508374D9F68718655 /* MockBluetoothService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		77F0115D6ACC05BE0A283719 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				4ABAF7CE52BB05ECC17BB6A9 /* PairingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		90CFAF48290168D35BC55305 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				86A2BDAE31B36B6DE45DF2C5 /* AppContainer.swift */,
+				6E3B2AAA9D808D2D8F4E36A3 /* AppDelegate.swift */,
+				960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */,
+				B647C2A265D4FE03D49FFAAC /* NotificationService.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		90E1CB1CEFFA72883D99E12E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				676154334E1F0D348D97CD08 /* ChatViewModel.swift */,
+				6C00FC41A96B64E044F5997B /* ConnectionViewModel.swift */,
+				FD14D5E1B5154CFE832006DE /* SidebarViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9C3EBC1E04D207B00101EC98 /* MeshCoreMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */,
+				69500D80E35C1732093A839C /* Models */,
+				6C43BC4EEDAC3A083A914F91 /* Services */,
+				30F13D25578AAD5D800EB5DE /* ViewModels */,
+			);
+			path = MeshCoreMacTests;
+			sourceTree = "<group>";
+		};
+		B09BEF8ED57E6D23E08E64C4 = {
+			isa = PBXGroup;
+			children = (
+				2133EFE12EE74727EAC5A661 /* MeshCoreMac */,
+				9C3EBC1E04D207B00101EC98 /* MeshCoreMacTests */,
+				33DB986D7DA697C122849240 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0471FDA3543887D49D4C5DF /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				309622427679B6678DB85655 /* MenuBarView.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56E81BE7DC0883BE075ED4D4 /* MeshCoreMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02D0293381636539415F9815 /* Build configuration list for PBXNativeTarget "MeshCoreMacTests" */;
+			buildPhases = (
+				67CE014A32E1C6A5504F87B5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				255D028AF2978AA7280156DD /* PBXTargetDependency */,
+			);
+			name = MeshCoreMacTests;
+			packageProductDependencies = (
+			);
+			productName = MeshCoreMacTests;
+			productReference = 5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41F01E48DC4BF21FA8E5C323 /* Build configuration list for PBXNativeTarget "MeshCoreMac" */;
+			buildPhases = (
+				AECDEA7AD1BC91786BF6BE8B /* Sources */,
+				A8B470D2B6B4EC71F2EC4A43 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MeshCoreMac;
+			packageProductDependencies = (
+				91D91B89374E00550EFAB2A3 /* GRDB */,
+			);
+			productName = MeshCoreMac;
+			productReference = 3DE3C73499500C29A157C3EE /* MeshCoreMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8279B148C01D359F3F817002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = D896437BE49859C0BD090A2D /* Build configuration list for PBXProject "MeshCoreMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = B09BEF8ED57E6D23E08E64C4;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 33DB986D7DA697C122849240 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */,
+				56E81BE7DC0883BE075ED4D4 /* MeshCoreMacTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		67CE014A32E1C6A5504F87B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CE40DD49787024B9A2C01BE /* ChatViewModelTests.swift in Sources */,
+				AC4A633C040DAD6F76E8AC75 /* ConnectionViewModelTests.swift in Sources */,
+				16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */,
+				61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */,
+				4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */,
+				5B7087A53374ADC39A994499 /* MessageStoreTests.swift in Sources */,
+				B082CBD02C7FE6CAC1A07A42 /* MockBluetoothService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AECDEA7AD1BC91786BF6BE8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D948FBADC80AFD85B20AD8C /* AppContainer.swift in Sources */,
+				4FC0F78991F6699AF141F6F6 /* AppDelegate.swift in Sources */,
+				52354C51ADAF63656EE518FC /* BluetoothServiceProtocol.swift in Sources */,
+				2D7CB194243320D0528434A1 /* ChatView.swift in Sources */,
+				DDD3C9980E838614D35AD6D9 /* ChatViewModel.swift in Sources */,
+				448C88E05CE4B31F44934165 /* ConnectionState.swift in Sources */,
+				ECB2D3B0ADB8B5B237A6FFE5 /* ConnectionViewModel.swift in Sources */,
+				6A1D9AF51D03ECFC4F90028C /* ErrorBannerView.swift in Sources */,
+				25BFD0400337844A44EABC45 /* MainWindowView.swift in Sources */,
+				F9766A2FC5CAF84FFCB2C515 /* MenuBarView.swift in Sources */,
+				8A8C416FD816DC23E430844B /* MeshChannel.swift in Sources */,
+				6A307B45767CCFC5C849E768 /* MeshContact.swift in Sources */,
+				84577897A1DE59F1786EFA77 /* MeshCoreBluetoothService.swift in Sources */,
+				94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */,
+				497B9FA1A2C2855CD6B81DAE /* MeshCoreProtocol.swift in Sources */,
+				E7ECB5EEE19A6878C6557A1E /* MeshCoreProtocolService.swift in Sources */,
+				6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */,
+				C5FBF3C2437BD08E8CD28986 /* MessageBubbleView.swift in Sources */,
+				B551983ED848D109C61593DB /* MessageStore.swift in Sources */,
+				1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */,
+				0E617710ECB95FE7AC5FAF49 /* NotificationService.swift in Sources */,
+				85BC5BE5669E035D5503038A /* PairingView.swift in Sources */,
+				D83FB62AFAB41BC9C0A565E3 /* SettingsView.swift in Sources */,
+				70B9FBE6B5E048DAC14725DD /* SidebarView.swift in Sources */,
+				B87EA3B4DFB49690D8E5BCEF /* SidebarViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		255D028AF2978AA7280156DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */;
+			targetProxy = 338497B47B297DC09F3BA734 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0940FA3E72CA379D6AF962B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = MeshCoreMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.meshcoremac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		9FB00B407DAE65B1D7C45C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.MeshCoreMacTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
+			};
+			name = Debug;
+		};
+		AE291E4C8F5EB8AE08FCDDE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		D1310EF40D3A5AB63CF3D02C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.MeshCoreMacTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
+			};
+			name = Release;
+		};
+		D6418C915F29A5F7A04F8109 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = MeshCoreMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.meshcoremac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		F23DC6DEB76E9713957195FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02D0293381636539415F9815 /* Build configuration list for PBXNativeTarget "MeshCoreMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FB00B407DAE65B1D7C45C86 /* Debug */,
+				D1310EF40D3A5AB63CF3D02C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41F01E48DC4BF21FA8E5C323 /* Build configuration list for PBXNativeTarget "MeshCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0940FA3E72CA379D6AF962B7 /* Debug */,
+				D6418C915F29A5F7A04F8109 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D896437BE49859C0BD090A2D /* Build configuration list for PBXProject "MeshCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F23DC6DEB76E9713957195FD /* Debug */,
+				AE291E4C8F5EB8AE08FCDDE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		91D91B89374E00550EFAB2A3 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8279B148C01D359F3F817002 /* Project object */;
+}

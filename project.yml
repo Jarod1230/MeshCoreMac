@@ -1,0 +1,66 @@
+name: MeshCoreMac
+options:
+  bundleIdPrefix: de.Jarod1230
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+packages:
+  GRDB:
+    url: https://github.com/groue/GRDB.swift
+    from: 6.0.0
+targets:
+  MeshCoreMac:
+    type: application
+    platform: macOS
+    deploymentTarget: "15.0"
+    sources:
+      - MeshCoreMac
+    info:
+      path: MeshCoreMac/Info.plist
+      properties:
+        CFBundleName: MeshCoreMac
+        CFBundleDisplayName: MeshCoreMac
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSBluetoothAlwaysUsageDescription: "MeshCoreMac verbindet sich per Bluetooth mit deinem MeshCore-Node."
+        LSUIElement: false
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: MeshCore Backup
+            CFBundleTypeRole: Editor
+            LSItemContentTypes:
+              - de.Jarod1230.meshcoremac.backup
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: de.Jarod1230.meshcoremac.backup
+            UTTypeDescription: MeshCore Backup
+            UTTypeConformsTo:
+              - public.data
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - meshcorebackup
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        PRODUCT_BUNDLE_IDENTIFIER: de.Jarod1230.meshcoremac
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: "NO"
+        ENABLE_HARDENED_RUNTIME: "NO"
+    dependencies:
+      - package: GRDB
+        product: GRDB
+  MeshCoreMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "15.0"
+    sources:
+      - MeshCoreMacTests
+    dependencies:
+      - target: MeshCoreMac
+    settings:
+      base:
+        SWIFT_VERSION: "6.0"
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        GENERATE_INFOPLIST_FILE: "YES"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: "NO"

@@ -7,6 +7,7 @@ import Observation
 final class ChatViewModel {
     private let bluetoothService: any BluetoothServiceProtocol
     private let messageStore: MessageStore
+    private let notificationService: NotificationService
 
     let conversation: MeshMessage.Kind
     private(set) var messages: [MeshMessage] = []
@@ -18,11 +19,13 @@ final class ChatViewModel {
     init(
         bluetoothService: any BluetoothServiceProtocol,
         messageStore: MessageStore,
-        conversation: MeshMessage.Kind
+        conversation: MeshMessage.Kind,
+        notificationService: NotificationService
     ) {
         self.bluetoothService = bluetoothService
         self.messageStore = messageStore
         self.conversation = conversation
+        self.notificationService = notificationService
     }
 
     func loadMessages() async {
@@ -89,6 +92,12 @@ final class ChatViewModel {
                       idx == ours else { return }
                 messages.append(msg)
                 try await messageStore.save(msg)
+                if msg.isIncoming {
+                    notificationService.sendNewMessageNotification(
+                        senderName: msg.senderName,
+                        preview: String(msg.text.prefix(60))
+                    )
+                }
 
             case .newDirectMessage(let msg):
                 guard case .direct(let cid) = msg.kind,
@@ -96,6 +105,12 @@ final class ChatViewModel {
                       cid == ours else { return }
                 messages.append(msg)
                 try await messageStore.save(msg)
+                if msg.isIncoming {
+                    notificationService.sendNewMessageNotification(
+                        senderName: msg.senderName,
+                        preview: String(msg.text.prefix(60))
+                    )
+                }
 
             case .messageAck(let msgId):
                 if let idx = messages.firstIndex(where: { $0.id.uuidString == msgId }) {

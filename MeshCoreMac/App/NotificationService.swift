@@ -7,7 +7,11 @@ final class NotificationService: Sendable {
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(
             options: [.alert, .sound, .badge]
-        ) { _, _ in }
+        ) { _, error in
+            if let error {
+                print("[NotificationService] Permission error: \(error)")
+            }
+        }
     }
 
     func sendNewMessageNotification(senderName: String, preview: String) {

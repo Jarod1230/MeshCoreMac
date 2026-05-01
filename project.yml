@@ -2,6 +2,9 @@ name: MeshCoreMac
 options:
   bundleIdPrefix: de.Jarod1230
   createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
 packages:
   GRDB:
     url: https://github.com/groue/GRDB.swift

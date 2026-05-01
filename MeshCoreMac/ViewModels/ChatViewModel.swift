@@ -36,6 +36,9 @@ final class ChatViewModel {
 
     func send(text: String) async throws {
         guard !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        guard text.count <= MeshCoreProtocol.maxMessageLength else {
+            throw ProtocolError.messageTooLong(text.count)
+        }
 
         let channelIndex: UInt8
         let contactId: String?

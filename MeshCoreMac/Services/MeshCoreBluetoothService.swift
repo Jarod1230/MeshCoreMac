@@ -4,9 +4,10 @@
 //
 // - `@MainActor`-isoliert: alle CB-Zugriffe laufen auf dem Main-Thread.
 //   `CBCentralManager(delegate: self, queue: .main)` stellt das sicher.
-// - Delegate-Methoden sind `nonisolated` und betreten den MainActor via
-//   `MainActor.assumeIsolated { ... }` — das ist das Swift-6-Muster für
-//   Callbacks, die die Library garantiert auf dem Main-Queue aufruft.
+// - Delegate-Methoden nutzen `@preconcurrency`-Konformanz: CoreBluetooth-
+//   Delegate-Protokolle sind noch nicht mit `Sendable` annotiert. Da CB
+//   alle Callbacks garantiert auf der bei init übergebenen Queue (.main)
+//   ausführt, unterdrückt `@preconcurrency` die Swift-6-Warnungen legal.
 // - `incomingFrames` ist ein `AsyncStream<Data>`: Konsumenten (z. B. ein
 //   ViewModel) iterieren asynchron, ohne ein eigenes Delegate zu brauchen.
 // - Auto-Reconnect: Bei Disconnect/Failure wird alle 10 s versucht,
@@ -38,6 +39,9 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
     private var lastKnownPeripheralId: UUID?
     private var reconnectTask: Task<Void, Never>?
 
+    // MARK: - Konstanten
+    private static let lastPeripheralIdKey = "lastPeripheralId"
+
     // MARK: - Init
 
     override init() {
@@ -48,14 +52,19 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
     }
 
+    deinit {
+        frameContinuation.finish()
+    }
+
     // MARK: - Public API
 
     func setLastKnownPeripheralId(_ id: UUID?) {
         self.lastKnownPeripheralId = id
-        UserDefaults.standard.set(id?.uuidString, forKey: "lastPeripheralId")
+        UserDefaults.standard.set(id?.uuidString, forKey: Self.lastPeripheralIdKey)
     }
 
     func startScanning() {
+        discoveredDevices = []
         guard centralManager.state == .poweredOn else { return }
         connectionState = .scanning
         centralManager.scanForPeripherals(
@@ -80,6 +89,9 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
         if let p = connectedPeripheral {
             centralManager.cancelPeripheralConnection(p)
         }
+        connectedPeripheral = nil
+        txCharacteristic = nil
+        rxCharacteristic = nil
         connectionState = .disconnected
     }
 
@@ -132,7 +144,7 @@ extension MeshCoreBluetoothService: @preconcurrency CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            if let idStr = UserDefaults.standard.string(forKey: "lastPeripheralId"),
+            if let idStr = UserDefaults.standard.string(forKey: Self.lastPeripheralIdKey),
                let id = UUID(uuidString: idStr) {
                 lastKnownPeripheralId = id
             }
@@ -172,6 +184,9 @@ extension MeshCoreBluetoothService: @preconcurrency CBCentralManagerDelegate {
         error: Error?
     ) {
         let name = peripheral.name ?? "Node"
+        connectedPeripheral = nil
+        txCharacteristic = nil
+        rxCharacteristic = nil
         connectionState = .failed(
             peripheralName: name,
             error: error?.localizedDescription ?? "Verbindung getrennt"

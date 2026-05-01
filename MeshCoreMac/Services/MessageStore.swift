@@ -27,6 +27,8 @@ final class MessageStore: Sendable {
         try runMigrations()
     }
 
+    // MARK: - Migrations
+
     private func runMigrations() throws {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("v1_create_messages") { db in
@@ -47,6 +49,8 @@ final class MessageStore: Sendable {
         try migrator.migrate(dbQueue)
     }
 
+    // MARK: - Write
+
     func save(_ message: MeshMessage) async throws {
         let record = MessageRecord(from: message)
         try await dbQueue.write { db in
@@ -60,8 +64,13 @@ final class MessageStore: Sendable {
                 sql: "UPDATE messages SET deliveryStatusRaw = ? WHERE id = ?",
                 arguments: [status.rawString, messageId.uuidString]
             )
+            guard db.changesCount > 0 else {
+                throw MessageStoreError.messageNotFound(messageId)
+            }
         }
     }
+
+    // MARK: - Read
 
     func fetchMessages(for kind: MeshMessage.Kind, limit: Int = 200) async throws -> [MeshMessage] {
         let (kindType, kindValue): (String, String) = {
@@ -80,6 +89,8 @@ final class MessageStore: Sendable {
         }
     }
 
+    // MARK: - Backup / Restore
+
     var databaseURL: URL? {
         let path = dbQueue.path
         guard !path.isEmpty else { return nil }
@@ -87,18 +98,30 @@ final class MessageStore: Sendable {
     }
 
     func exportBackup(to destination: URL) throws {
-        guard let srcURL = databaseURL else { return }
-        if FileManager.default.fileExists(atPath: destination.path) {
-            try FileManager.default.removeItem(at: destination)
-        }
-        try FileManager.default.copyItem(at: srcURL, to: destination)
+        guard databaseURL != nil else { return }
+        let destQueue = try DatabaseQueue(path: destination.path)
+        try dbQueue.backup(to: destQueue)
     }
 
     func importBackup(from source: URL) throws {
         guard let destURL = databaseURL else { return }
+        // Validate backup contains expected schema
         let testQueue = try DatabaseQueue(path: source.path)
-        _ = try testQueue.read { db in try db.tableExists("messages") }
-        try FileManager.default.removeItem(at: destURL)
-        try FileManager.default.copyItem(at: source, to: destURL)
+        guard try testQueue.read({ db in try db.tableExists("messages") }) else {
+            throw MessageStoreError.invalidBackup
+        }
+        // Copy to temp file, then atomically replace destination
+        let tmpURL = destURL.deletingLastPathComponent()
+            .appendingPathComponent("messages_import_\(UUID().uuidString).sqlite")
+        defer { try? FileManager.default.removeItem(at: tmpURL) }
+        try FileManager.default.copyItem(at: source, to: tmpURL)
+        try FileManager.default.replaceItem(at: destURL, withItemAt: tmpURL,
+                                            backupItemName: nil, options: [],
+                                            resultingItemURL: nil)
     }
+}
+
+enum MessageStoreError: Error {
+    case messageNotFound(UUID)
+    case invalidBackup
 }

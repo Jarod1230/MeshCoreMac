@@ -11,6 +11,10 @@ final class MessageStoreTests: XCTestCase {
         store = try MessageStore(inMemory: true)
     }
 
+    override func tearDown() async throws {
+        store = nil
+    }
+
     func testSaveAndFetch_channelMessage() async throws {
         let msg = MeshMessage(
             id: UUID(),
@@ -69,5 +73,25 @@ final class MessageStoreTests: XCTestCase {
         try await store.updateDeliveryStatus(messageId: id, status: .delivered)
         let fetched = try await store.fetchMessages(for: .channel(index: 0))
         XCTAssertEqual(fetched[0].deliveryStatus, .delivered)
+    }
+
+    func testDeliveryStatus_failed_roundTrip() async throws {
+        let id = UUID()
+        let msg = MeshMessage(id: id, kind: .channel(index: 0),
+            senderName: "Me", text: "Test", timestamp: Date(),
+            routing: nil, deliveryStatus: .failed("Timeout"), isIncoming: false)
+        try await store.save(msg)
+        let fetched = try await store.fetchMessages(for: .channel(index: 0))
+        XCTAssertEqual(fetched[0].deliveryStatus, .failed("Timeout"))
+    }
+
+    func testUpdateDeliveryStatus_unknownId_throws() async throws {
+        let unknownId = UUID()
+        do {
+            try await store.updateDeliveryStatus(messageId: unknownId, status: .delivered)
+            XCTFail("Hätte werfen sollen")
+        } catch MessageStoreError.messageNotFound {
+            // erwartet
+        }
     }
 }

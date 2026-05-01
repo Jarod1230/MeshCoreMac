@@ -25,7 +25,7 @@ enum ConnectionState: Equatable, Sendable {
     var isConnectedOrReady: Bool {
         switch self {
         case .connected, .ready: return true
-        default: return false
+        case .disconnected, .scanning, .connecting, .failed: return false
         }
     }
 }

@@ -30,7 +30,7 @@ struct MenuBarView: View {
         Button("Verbindung trennen") {
             container.connectionViewModel.disconnect()
         }
-        .disabled(!container.connectionViewModel.isConnected)
+        .disabled(!container.connectionViewModel.connectionState.isConnectedOrReady)
 
         Divider()
 

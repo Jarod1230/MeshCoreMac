@@ -209,7 +209,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMac;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.meshcoremac;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
@@ -229,7 +229,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMacTests;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.MeshCoreMacTests;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
@@ -305,7 +305,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMacTests;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.MeshCoreMacTests;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
@@ -326,7 +326,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMac;
+				PRODUCT_BUNDLE_IDENTIFIER = de.Jarod1230.meshcoremac;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};

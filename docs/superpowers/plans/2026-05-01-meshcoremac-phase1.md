@@ -97,7 +97,7 @@ mkdir -p MeshCoreMacTests/{Models,Services,ViewModels}
 ```yaml
 name: MeshCoreMac
 options:
-  bundleIdPrefix: de.jarodschilke
+  bundleIdPrefix: de.Jarod1230
   createIntermediateGroups: true
 packages:
   GRDB:
@@ -115,7 +115,7 @@ targets:
       properties:
         CFBundleName: MeshCoreMac
         CFBundleDisplayName: MeshCoreMac
-        CFBundleIdentifier: de.jarodschilke.meshcoremac
+        CFBundleIdentifier: de.Jarod1230.meshcoremac
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         NSBluetoothAlwaysUsageDescription: "MeshCoreMac verbindet sich per Bluetooth mit deinem MeshCore-Node."
@@ -2696,7 +2696,7 @@ struct BackupDocument: FileDocument {
 
 // Custom UTType für .meshcorebackup
 extension UTType {
-    static let meshcoreBackup = UTType(exportedAs: "de.jarodschilke.meshcoremac.backup")
+    static let meshcoreBackup = UTType(exportedAs: "de.Jarod1230.meshcoremac.backup")
 }
 ```
 
@@ -2709,9 +2709,9 @@ CFBundleDocumentTypes:
   - CFBundleTypeName: MeshCore Backup
     CFBundleTypeRole: Editor
     LSItemContentTypes:
-      - de.jarodschilke.meshcoremac.backup
+      - de.Jarod1230.meshcoremac.backup
 UTExportedTypeDeclarations:
-  - UTTypeIdentifier: de.jarodschilke.meshcoremac.backup
+  - UTTypeIdentifier: de.Jarod1230.meshcoremac.backup
     UTTypeDescription: MeshCore Backup
     UTTypeConformsTo:
       - public.data

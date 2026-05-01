@@ -7,24 +7,10 @@ struct ChatView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Fehler-Banner — wird in Task 12 durch ErrorBannerView ersetzt
             if let error = chatVM.errorMessage {
-                HStack(spacing: 10) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.yellow)
-                    Text(error)
-                        .font(.callout)
-                        .lineLimit(2)
-                    Spacer()
-                    Button { chatVM.errorMessage = nil } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
-                    }
-                    .buttonStyle(.plain)
+                ErrorBannerView(message: error) {
+                    chatVM.errorMessage = nil
                 }
-                .padding(12)
-                .background(Color(.windowBackgroundColor).opacity(0.95))
-                .overlay(alignment: .bottom) { Divider() }
             }
 
             ScrollViewReader { proxy in

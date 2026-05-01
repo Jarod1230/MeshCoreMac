@@ -13,6 +13,12 @@ struct MainWindowView: View {
             }
         }
         .frame(minWidth: 700, minHeight: 500)
+        .overlay(alignment: .top) {
+            if let err = container.connectionViewModel.errorMessage {
+                ErrorBannerView(message: err) {}
+                    .animation(.easeInOut, value: err)
+            }
+        }
     }
 
     private var messengerView: some View {

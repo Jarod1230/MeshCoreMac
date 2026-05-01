@@ -4,6 +4,7 @@ import SwiftUI
 struct ChatView: View {
     @Bindable var chatVM: ChatViewModel
     let conversation: MeshMessage.Kind
+    let contactsVM: ContactsViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -65,8 +66,10 @@ struct ChatView: View {
 
     private var conversationTitle: String {
         switch conversation {
-        case .channel(let idx): return "Kanal \(idx)"
-        case .direct(let cid):  return cid
+        case .channel(let idx):
+            return "Kanal \(idx)"
+        case .direct(let cid):
+            return contactsVM.contacts.first(where: { $0.id == cid })?.name ?? cid
         }
     }
 

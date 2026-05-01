@@ -5,6 +5,7 @@ struct MainWindowView: View {
     let container: AppContainer
 
     @State private var dismissedError: String? = nil
+    @State private var showingMap = false
 
     var body: some View {
         Group {
@@ -32,6 +33,19 @@ struct MainWindowView: View {
                 dismissedError = nil
             }
         }
+        .sheet(isPresented: $showingMap) {
+            NavigationStack {
+                NodeMapView(
+                    contacts: container.contactsViewModel.contacts,
+                    ownPosition: container.contactsViewModel.ownPosition
+                )
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Schließen") { showingMap = false }
+                    }
+                }
+            }
+        }
     }
 
     private var messengerView: some View {
@@ -46,7 +60,8 @@ struct MainWindowView: View {
             if let conversation = container.sidebarViewModel.selectedConversation {
                 ChatView(
                     chatVM: container.makeChatViewModel(for: conversation),
-                    conversation: conversation
+                    conversation: conversation,
+                    contactsVM: container.contactsViewModel
                 )
             } else {
                 ContentUnavailableView(
@@ -56,6 +71,15 @@ struct MainWindowView: View {
                 )
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button {
+                    showingMap = true
+                } label: {
+                    Label("Karte", systemImage: "map")
+                }
+                .help("Karte aller bekannten Nodes anzeigen")
+            }
+        }
     }
-
 }

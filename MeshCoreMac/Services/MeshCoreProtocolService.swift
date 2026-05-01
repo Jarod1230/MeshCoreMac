@@ -153,8 +153,9 @@ enum MeshCoreProtocolService {
             ? Date(timeIntervalSince1970: TimeInterval(lastHeardSecs)) : nil
         let flags = bytes[36]
         let isOnline = (flags & 0x01) != 0
-        let nameData = Data(bytes.dropFirst(37))
-        let name = String(data: nameData, encoding: .utf8)?.trimmingCharacters(in: .controlCharacters)
+        let rawName = Data(bytes.dropFirst(37))
+        let nameEnd = rawName.firstIndex(of: 0) ?? rawName.endIndex
+        let name = String(data: rawName[rawName.startIndex..<nameEnd], encoding: .utf8)
         return .contact(MeshContact(
             id: contactId,
             name: name?.isEmpty == false ? name! : contactId,

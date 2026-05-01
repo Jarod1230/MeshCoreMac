@@ -55,6 +55,7 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
         }
         XCTAssertEqual(msg.text, "Hallo")
         XCTAssertEqual(msg.routing?.hops, 2)
+        XCTAssertEqual(msg.routing?.snr ?? 0, -8.0, accuracy: 1.0)
         guard case .channel(let idx) = msg.kind else { return XCTFail() }
         XCTAssertEqual(idx, 0)
     }

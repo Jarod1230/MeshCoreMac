@@ -38,6 +38,7 @@ struct MainWindowView: View {
         NavigationSplitView {
             SidebarView(
                 sidebarVM: container.sidebarViewModel,
+                contactsVM: container.contactsViewModel,
                 connectionVM: container.connectionViewModel
             )
             .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 280)

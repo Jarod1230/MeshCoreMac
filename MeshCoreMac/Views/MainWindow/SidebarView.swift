@@ -3,6 +3,7 @@ import SwiftUI
 
 struct SidebarView: View {
     let sidebarVM: SidebarViewModel
+    let contactsVM: ContactsViewModel
     let connectionVM: ConnectionViewModel
 
     var body: some View {
@@ -19,9 +20,9 @@ struct SidebarView: View {
                 }
             }
 
-            if !sidebarVM.contacts.isEmpty {
+            if !contactsVM.contacts.isEmpty {
                 Section("Direkt") {
-                    ForEach(sidebarVM.contacts) { contact in
+                    ForEach(contactsVM.contacts) { contact in
                         HStack {
                             Label(contact.name, systemImage: "person.fill")
                             Spacer()

@@ -9,10 +9,7 @@ final class SidebarViewModel {
     var contacts: [MeshContact] = []
     var selectedConversation: MeshMessage.Kind? = nil
 
-    private let messageStore: MessageStore
-
-    init(messageStore: MessageStore) {
-        self.messageStore = messageStore
+    init() {
         loadDefaultChannels()
     }
 

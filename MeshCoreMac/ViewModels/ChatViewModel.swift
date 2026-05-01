@@ -71,9 +71,8 @@ final class ChatViewModel {
 
     private func startListening() {
         listenerTask?.cancel()
-        listenerTask = Task { [weak self] in
-            guard let self else { return }
-            for await frameData in bluetoothService.incomingFrames {
+        listenerTask = Task {
+            for await frameData in self.bluetoothService.incomingFrames {
                 guard !Task.isCancelled else { break }
                 await self.handleFrame(frameData)
             }
@@ -113,11 +112,13 @@ final class ChatViewModel {
                 break
             }
         } catch {
-            // Protokoll-Fehler gehen in den Diagnose-Log (Task 12)
+            #if DEBUG
+            print("[ChatViewModel] Frame decode error: \(error)")
+            #endif
         }
     }
 
     deinit {
-        listenerTask?.cancel()
+        listenerTask?.cancel()  // Task.cancel() ist nonisolated — erlaubt
     }
 }

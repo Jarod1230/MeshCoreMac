@@ -1,6 +1,6 @@
 name: MeshCoreMac
 options:
-  bundleIdPrefix: de.jarodschilke
+  bundleIdPrefix: de.Jarod1230
   createIntermediateGroups: true
 packages:
   GRDB:
@@ -18,7 +18,6 @@ targets:
       properties:
         CFBundleName: MeshCoreMac
         CFBundleDisplayName: MeshCoreMac
-        CFBundleIdentifier: de.jarodschilke.meshcoremac
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         NSBluetoothAlwaysUsageDescription: "MeshCoreMac verbindet sich per Bluetooth mit deinem MeshCore-Node."
@@ -27,6 +26,7 @@ targets:
       base:
         SWIFT_VERSION: "6.0"
         MACOSX_DEPLOYMENT_TARGET: "15.0"
+        PRODUCT_BUNDLE_IDENTIFIER: de.Jarod1230.meshcoremac
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGNING_REQUIRED: "NO"
         ENABLE_HARDENED_RUNTIME: "NO"

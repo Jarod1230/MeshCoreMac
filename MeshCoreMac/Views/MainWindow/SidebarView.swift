@@ -4,6 +4,9 @@ import SwiftUI
 struct SidebarView: View {
     let sidebarVM: SidebarViewModel
     let connectionVM: ConnectionViewModel
+    let contactsVM: ContactsViewModel
+
+    @State private var selectedContactForDetail: MeshContact? = nil
 
     var body: some View {
         List(selection: Binding(
@@ -19,17 +22,24 @@ struct SidebarView: View {
                 }
             }
 
-            if !sidebarVM.contacts.isEmpty {
+            if !contactsVM.contacts.isEmpty {
                 Section("Direkt") {
-                    ForEach(sidebarVM.contacts) { contact in
+                    ForEach(contactsVM.contacts) { contact in
                         HStack {
                             Label(contact.name, systemImage: "person.fill")
+                                .tag(ConversationID(kind: .direct(contactId: contact.id)))
                             Spacer()
                             Circle()
                                 .fill(contact.isOnline ? Color.green : Color.red)
                                 .frame(width: 8, height: 8)
+                            Button {
+                                selectedContactForDetail = contact
+                            } label: {
+                                Image(systemName: "info.circle")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .tag(ConversationID(kind: .direct(contactId: contact.id)))
                     }
                 }
             }
@@ -47,6 +57,13 @@ struct SidebarView: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
+        }
+        .sheet(item: $selectedContactForDetail) { contact in
+            NavigationStack {
+                ContactDetailView(contact: contact) { updated in
+                    Task { await contactsVM.updateContact(updated) }
+                }
+            }
         }
     }
 }

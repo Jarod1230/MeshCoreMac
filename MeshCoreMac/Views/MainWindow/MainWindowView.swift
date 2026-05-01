@@ -35,15 +35,12 @@ struct MainWindowView: View {
         }
         .sheet(isPresented: $showingMap) {
             NavigationStack {
-                NodeMapView(
-                    contacts: container.contactsViewModel.contacts,
-                    ownPosition: container.contactsViewModel.ownPosition
-                )
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Schließen") { showingMap = false }
+                MapSheetContent(contactsVM: container.contactsViewModel)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Schließen") { showingMap = false }
+                        }
                     }
-                }
             }
         }
     }
@@ -72,7 +69,7 @@ struct MainWindowView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     showingMap = true
                 } label: {
@@ -81,5 +78,13 @@ struct MainWindowView: View {
                 .help("Karte aller bekannten Nodes anzeigen")
             }
         }
+    }
+}
+
+// Observes ContactsViewModel directly so NodeMapView updates reactively.
+private struct MapSheetContent: View {
+    let contactsVM: ContactsViewModel
+    var body: some View {
+        NodeMapView(contacts: contactsVM.contacts, ownPosition: contactsVM.ownPosition)
     }
 }

@@ -3,7 +3,7 @@ import Foundation
 struct MeshMessage: Identifiable, Equatable, Sendable {
     let id: UUID
 
-    enum Kind: Equatable, Sendable {
+    enum Kind: Equatable, Hashable, Sendable {
         case channel(index: Int)
         case direct(contactId: String)
     }

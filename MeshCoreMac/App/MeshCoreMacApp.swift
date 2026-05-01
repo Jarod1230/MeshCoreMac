@@ -19,8 +19,7 @@ struct MeshCoreMacApp: App {
 
     var body: some Scene {
         WindowGroup {
-            // Platzhalter — wird in Task 10 durch MainWindowView ersetzt
-            Text("MeshCoreMac")
+            MainWindowView(container: container)
                 .onDisappear {
                     appDelegate.switchToAccessoryMode()
                 }

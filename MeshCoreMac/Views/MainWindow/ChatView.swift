@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct ChatView: View {
-    @State var chatVM: ChatViewModel
+    @Bindable var chatVM: ChatViewModel
     let conversation: MeshMessage.Kind
 
     var body: some View {
@@ -51,9 +51,8 @@ struct ChatView: View {
                     TextField("Nachricht eingeben…", text: $chatVM.inputText, axis: .vertical)
                         .lineLimit(1...5)
                         .textFieldStyle(.plain)
-                        .onSubmit { Task { await trySend() } }
 
-                    let count = chatVM.inputText.count
+                    let count = chatVM.inputText.utf8.count
                     Text("\(count)/\(MeshCoreProtocol.maxMessageLength)")
                         .font(.caption2)
                         .foregroundStyle(count > MeshCoreProtocol.maxMessageLength ? Color.red : Color.secondary)
@@ -67,7 +66,7 @@ struct ChatView: View {
                 }
                 .disabled(
                     chatVM.inputText.trimmingCharacters(in: .whitespaces).isEmpty ||
-                    chatVM.inputText.count > MeshCoreProtocol.maxMessageLength
+                    chatVM.inputText.utf8.count > MeshCoreProtocol.maxMessageLength
                 )
                 .keyboardShortcut(.return, modifiers: .command)
             }

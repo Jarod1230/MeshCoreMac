@@ -50,4 +50,8 @@ final class MockBluetoothService: BluetoothServiceProtocol {
     func simulateDisconnect() {
         connectionState = .failed(peripheralName: "Mock-Node", error: "Verbindung verloren")
     }
+
+    func simulateConnect(peripheralName: String = "Mock-Node") {
+        connectionState = .ready(peripheralName: peripheralName)
+    }
 }

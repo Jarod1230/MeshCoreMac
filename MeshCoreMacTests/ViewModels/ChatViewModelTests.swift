@@ -34,7 +34,7 @@ final class ChatViewModelTests: XCTestCase {
     }
 
     func testSendMessage_rejectsOverlongText() async throws {
-        let longText = String(repeating: "A", count: 134)
+        let longText = String(repeating: "A", count: MeshCoreProtocol.maxMessageLength + 1)
         do {
             try await vm.send(text: longText)
             XCTFail("Hätte Fehler werfen sollen")
@@ -51,8 +51,11 @@ final class ChatViewModelTests: XCTestCase {
         ]
         frameBytes += Array("Incoming".utf8)
         mockBluetooth.simulateIncomingFrame(Data(frameBytes))
-        // Kurz warten, damit der AsyncStream-Task läuft
-        try await Task.sleep(for: .milliseconds(100))
+        // Dem AsyncStream-Consumer Zeit zum Laufen geben
+        for _ in 0..<10 {
+            await Task.yield()
+            if !vm.messages.isEmpty { break }
+        }
         XCTAssertFalse(vm.messages.isEmpty)
     }
 }

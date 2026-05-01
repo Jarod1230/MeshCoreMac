@@ -12,7 +12,10 @@ final class ConnectionViewModel {
     var discoveredDevices: [CBPeripheral] { bluetoothService.discoveredDevices }
 
     var isConnected: Bool { connectionState.isConnectedOrReady }
-    var errorMessage: String? = nil
+    var errorMessage: String? {
+        if case .failed(_, let error) = connectionState { return error }
+        return nil
+    }
 
     init(bluetoothService: any BluetoothServiceProtocol) {
         self.bluetoothService = bluetoothService

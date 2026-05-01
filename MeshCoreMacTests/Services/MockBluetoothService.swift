@@ -63,4 +63,9 @@ final class MockBluetoothService: BluetoothServiceProtocol {
     func simulateConnect(peripheralName: String = "Mock-Node") {
         connectionState = .ready(peripheralName: peripheralName)
     }
+
+    deinit {
+        frameContinuation.finish()
+        nodeEventContinuation.finish()
+    }
 }

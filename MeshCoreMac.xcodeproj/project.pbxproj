@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */; };
+		94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */; };
+		AA1691906E930CCFB8E96340 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 91D91B89374E00550EFAB2A3 /* GRDB */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		338497B47B297DC09F3BA734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8279B148C01D359F3F817002 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C9BF7ACB3B70805DEC054B7;
+			remoteInfo = MeshCoreMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacTests.swift; sourceTree = "<group>"; };
+		3DE3C73499500C29A157C3EE /* MeshCoreMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeshCoreMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeshCoreMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacApp.swift; sourceTree = "<group>"; };
+		A271D0E9D5233362DEE0C700 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A8B470D2B6B4EC71F2EC4A43 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA1691906E930CCFB8E96340 /* GRDB in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		14FD5D8CD22CBB91BAA28F52 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2133EFE12EE74727EAC5A661 /* MeshCoreMac */ = {
+			isa = PBXGroup;
+			children = (
+				A271D0E9D5233362DEE0C700 /* Info.plist */,
+				90CFAF48290168D35BC55305 /* App */,
+				14FD5D8CD22CBB91BAA28F52 /* Views */,
+			);
+			path = MeshCoreMac;
+			sourceTree = "<group>";
+		};
+		33DB986D7DA697C122849240 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DE3C73499500C29A157C3EE /* MeshCoreMac.app */,
+				5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		90CFAF48290168D35BC55305 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		9C3EBC1E04D207B00101EC98 /* MeshCoreMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */,
+			);
+			path = MeshCoreMacTests;
+			sourceTree = "<group>";
+		};
+		B09BEF8ED57E6D23E08E64C4 = {
+			isa = PBXGroup;
+			children = (
+				2133EFE12EE74727EAC5A661 /* MeshCoreMac */,
+				9C3EBC1E04D207B00101EC98 /* MeshCoreMacTests */,
+				33DB986D7DA697C122849240 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56E81BE7DC0883BE075ED4D4 /* MeshCoreMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02D0293381636539415F9815 /* Build configuration list for PBXNativeTarget "MeshCoreMacTests" */;
+			buildPhases = (
+				67CE014A32E1C6A5504F87B5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				255D028AF2978AA7280156DD /* PBXTargetDependency */,
+			);
+			name = MeshCoreMacTests;
+			packageProductDependencies = (
+			);
+			productName = MeshCoreMacTests;
+			productReference = 5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41F01E48DC4BF21FA8E5C323 /* Build configuration list for PBXNativeTarget "MeshCoreMac" */;
+			buildPhases = (
+				AECDEA7AD1BC91786BF6BE8B /* Sources */,
+				A8B470D2B6B4EC71F2EC4A43 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MeshCoreMac;
+			packageProductDependencies = (
+				91D91B89374E00550EFAB2A3 /* GRDB */,
+			);
+			productName = MeshCoreMac;
+			productReference = 3DE3C73499500C29A157C3EE /* MeshCoreMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8279B148C01D359F3F817002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = D896437BE49859C0BD090A2D /* Build configuration list for PBXProject "MeshCoreMac" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = B09BEF8ED57E6D23E08E64C4;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 33DB986D7DA697C122849240 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */,
+				56E81BE7DC0883BE075ED4D4 /* MeshCoreMacTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		67CE014A32E1C6A5504F87B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AECDEA7AD1BC91786BF6BE8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		255D028AF2978AA7280156DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C9BF7ACB3B70805DEC054B7 /* MeshCoreMac */;
+			targetProxy = 338497B47B297DC09F3BA734 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0940FA3E72CA379D6AF962B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = MeshCoreMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		9FB00B407DAE65B1D7C45C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMacTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
+			};
+			name = Debug;
+		};
+		AE291E4C8F5EB8AE08FCDDE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D1310EF40D3A5AB63CF3D02C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMacTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeshCoreMac.app/Contents/MacOS/MeshCoreMac";
+			};
+			name = Release;
+		};
+		D6418C915F29A5F7A04F8109 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = MeshCoreMac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.jarodschilke.MeshCoreMac;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		F23DC6DEB76E9713957195FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02D0293381636539415F9815 /* Build configuration list for PBXNativeTarget "MeshCoreMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FB00B407DAE65B1D7C45C86 /* Debug */,
+				D1310EF40D3A5AB63CF3D02C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41F01E48DC4BF21FA8E5C323 /* Build configuration list for PBXNativeTarget "MeshCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0940FA3E72CA379D6AF962B7 /* Debug */,
+				D6418C915F29A5F7A04F8109 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D896437BE49859C0BD090A2D /* Build configuration list for PBXProject "MeshCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F23DC6DEB76E9713957195FD /* Debug */,
+				AE291E4C8F5EB8AE08FCDDE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		91D91B89374E00550EFAB2A3 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 493BEE69B3A686FF014C9C2A /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8279B148C01D359F3F817002 /* Project object */;
+}

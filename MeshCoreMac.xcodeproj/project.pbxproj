@@ -8,15 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */; };
+		1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */; };
 		448C88E05CE4B31F44934165 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */; };
 		497B9FA1A2C2855CD6B81DAE /* MeshCoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */; };
 		4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE82B0467AA0889350B7F71 /* MeshMessageTests.swift */; };
+		5B7087A53374ADC39A994499 /* MessageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36286B542A2D72477F42748F /* MessageStoreTests.swift */; };
 		61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */; };
 		6A307B45767CCFC5C849E768 /* MeshContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1161B50A49EB13D5F04A483 /* MeshContact.swift */; };
 		6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */; };
 		8A8C416FD816DC23E430844B /* MeshChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F252B6593A207542FC33F629 /* MeshChannel.swift */; };
 		94702EFD3F235EADFA433180 /* MeshCoreMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */; };
 		AA1691906E930CCFB8E96340 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 91D91B89374E00550EFAB2A3 /* GRDB */; };
+		B551983ED848D109C61593DB /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */; };
 		E7ECB5EEE19A6878C6557A1E /* MeshCoreProtocolService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,9 +37,12 @@
 		0758B0FE289EF74EC6DA0563 /* ConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionState.swift; sourceTree = "<group>"; };
 		16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocolService.swift; sourceTree = "<group>"; };
 		183805CD72006F83823BFC87 /* MeshCoreMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacTests.swift; sourceTree = "<group>"; };
+		36286B542A2D72477F42748F /* MessageStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreTests.swift; sourceTree = "<group>"; };
 		3DE3C73499500C29A157C3EE /* MeshCoreMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeshCoreMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocolServiceTests.swift; sourceTree = "<group>"; };
 		5E15953421E64010A17F4F46 /* MeshCoreMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeshCoreMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
+		70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStoreRecord.swift; sourceTree = "<group>"; };
 		7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreProtocol.swift; sourceTree = "<group>"; };
 		8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshMessage.swift; sourceTree = "<group>"; };
 		960A39FBADB6994E9F8A2B58 /* MeshCoreMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCoreMacApp.swift; sourceTree = "<group>"; };
@@ -82,6 +88,8 @@
 			children = (
 				7662F98A87064732146A9E28 /* MeshCoreProtocol.swift */,
 				16B84613F3B5ED907D545EEB /* MeshCoreProtocolService.swift */,
+				6729B12C60EE39C4AADEBAF8 /* MessageStore.swift */,
+				70F1C8E34ED7877138EE8DFD /* MessageStoreRecord.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -118,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				40EF55C96200FE31C411F79A /* MeshCoreProtocolServiceTests.swift */,
+				36286B542A2D72477F42748F /* MessageStoreTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -231,6 +240,7 @@
 				16CCE33A639DBCBAA7940DAA /* MeshCoreMacTests.swift in Sources */,
 				61A84A02A228C2AACF690437 /* MeshCoreProtocolServiceTests.swift in Sources */,
 				4A9362842023A58F1E2120A0 /* MeshMessageTests.swift in Sources */,
+				5B7087A53374ADC39A994499 /* MessageStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +255,8 @@
 				497B9FA1A2C2855CD6B81DAE /* MeshCoreProtocol.swift in Sources */,
 				E7ECB5EEE19A6878C6557A1E /* MeshCoreProtocolService.swift in Sources */,
 				6E5630576308F69837FC1115 /* MeshMessage.swift in Sources */,
+				B551983ED848D109C61593DB /* MessageStore.swift in Sources */,
+				1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,19 @@ targets:
         CFBundleVersion: "1"
         NSBluetoothAlwaysUsageDescription: "MeshCoreMac verbindet sich per Bluetooth mit deinem MeshCore-Node."
         LSUIElement: false
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: MeshCore Backup
+            CFBundleTypeRole: Editor
+            LSItemContentTypes:
+              - de.Jarod1230.meshcoremac.backup
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: de.Jarod1230.meshcoremac.backup
+            UTTypeDescription: MeshCore Backup
+            UTTypeConformsTo:
+              - public.data
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - meshcorebackup
     settings:
       base:
         SWIFT_VERSION: "6.0"

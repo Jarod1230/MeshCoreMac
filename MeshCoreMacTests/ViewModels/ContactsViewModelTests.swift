@@ -1,3 +1,4 @@
+// MeshCoreMacTests/ViewModels/ContactsViewModelTests.swift
 import XCTest
 import CoreLocation
 @testable import MeshCoreMac
@@ -67,7 +68,8 @@ final class ContactsViewModelTests: XCTestCase {
                                    lat: nil, lon: nil)
         try await contactStore.save(contact)
 
-        let newVM = ContactsViewModel(contactStore: contactStore, bluetoothService: mockBluetooth)
+        let isolatedMock = MockBluetoothService()
+        let newVM = ContactsViewModel(contactStore: contactStore, bluetoothService: isolatedMock)
         await newVM.start()
 
         XCTAssertEqual(newVM.contacts.count, 1)
@@ -101,7 +103,7 @@ final class ContactsViewModelTests: XCTestCase {
                 XCTFail("Timeout waiting for condition")
                 return
             }
-            await Task.yield()
+            try await Task.sleep(for: .milliseconds(10))
         }
     }
 }

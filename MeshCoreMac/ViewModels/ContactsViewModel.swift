@@ -13,6 +13,8 @@ final class ContactsViewModel {
     private let bluetoothService: any BluetoothServiceProtocol
 
     nonisolated(unsafe) private var listenerTask: Task<Void, Never>?
+    private var pendingContacts: [MeshContact] = []
+    private var collectingContacts = false
 
     init(contactStore: ContactStore, bluetoothService: any BluetoothServiceProtocol) {
         self.contactStore = contactStore
@@ -58,9 +60,28 @@ final class ContactsViewModel {
             upsert(c)
         case .contact(let c):
             try? await contactStore.save(c)
-            upsert(c)
-        case .contactsStart, .contactsEnd:
-            break
+            if collectingContacts {
+                // Buffer during GET_CONTACTS sequence; list replaced on contactsEnd
+                if let idx = pendingContacts.firstIndex(where: { $0.id == c.id }) {
+                    pendingContacts[idx] = c
+                } else {
+                    pendingContacts.append(c)
+                }
+            } else {
+                upsert(c)
+            }
+        case .contactsStart:
+            pendingContacts = []
+            collectingContacts = true
+        case .contactsEnd:
+            if collectingContacts {
+                // Merge GET_CONTACTS list: replace known list, keep ADVERT-only nodes
+                let listedIds = Set(pendingContacts.map { $0.id })
+                let advertOnly = contacts.filter { !listedIds.contains($0.id) }
+                contacts = pendingContacts + advertOnly
+                collectingContacts = false
+                pendingContacts = []
+            }
         case .newChannelMessage, .newDirectMessage, .messageAck:
             break
         }
@@ -74,5 +95,5 @@ final class ContactsViewModel {
         }
     }
 
-    deinit { listenerTask?.cancel() }
+    deinit { listenerTask?.cancel() }  // Task.cancel() ist nonisolated — erlaubt
 }

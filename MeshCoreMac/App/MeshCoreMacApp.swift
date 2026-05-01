@@ -34,6 +34,10 @@ struct MeshCoreMacApp: App {
                 openWindow: openMainWindow
             )
         }
+
+        Settings {
+            SettingsView(messageStore: container.messageStore)
+        }
     }
 
     private func openMainWindow() {

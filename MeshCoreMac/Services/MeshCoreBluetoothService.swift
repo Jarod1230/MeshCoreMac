@@ -30,6 +30,8 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
     private let frameContinuation: AsyncStream<Data>.Continuation
     let nodeEventStream: AsyncStream<DecodedFrame>
     private let nodeEventContinuation: AsyncStream<DecodedFrame>.Continuation
+    let rxLogStream: AsyncStream<RxLogEntry>
+    private let rxLogContinuation: AsyncStream<RxLogEntry>.Continuation
 
     // MARK: - CoreBluetooth
     private var centralManager: CBCentralManager!
@@ -53,6 +55,9 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
         let (nodeStream, nodeCont) = AsyncStream<DecodedFrame>.makeStream()
         self.nodeEventStream = nodeStream
         self.nodeEventContinuation = nodeCont
+        let (logStream, logCont) = AsyncStream<RxLogEntry>.makeStream()
+        self.rxLogStream = logStream
+        self.rxLogContinuation = logCont
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: .main)
     }
@@ -61,6 +66,7 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
         reconnectTask?.cancel()
         frameContinuation.finish()
         nodeEventContinuation.finish()
+        rxLogContinuation.finish()
     }
 
     // MARK: - Public API
@@ -108,6 +114,13 @@ final class MeshCoreBluetoothService: NSObject, BluetoothServiceProtocol {
             throw BluetoothError.notConnected
         }
         peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        rxLogContinuation.yield(RxLogEntry(
+            id: UUID(),
+            timestamp: Date(),
+            direction: .outgoing,
+            rawBytes: data,
+            decoded: nil
+        ))
     }
 
     // MARK: - Auto-Reconnect
@@ -258,8 +271,9 @@ extension MeshCoreBluetoothService: @preconcurrency CBPeripheralDelegate {
         guard error == nil, let value = characteristic.value else { return }
         frameContinuation.yield(value)
 
-        // Route decoded node events to nodeEventStream (ChatViewModel ignores these via break)
-        if let decoded = try? MeshCoreProtocolService.decodeFrame(value) {
+        let decoded = try? MeshCoreProtocolService.decodeFrame(value)
+
+        if let decoded {
             switch decoded {
             case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd:
                 nodeEventContinuation.yield(decoded)
@@ -267,6 +281,15 @@ extension MeshCoreBluetoothService: @preconcurrency CBPeripheralDelegate {
                 break
             }
         }
+
+        rxLogContinuation.yield(RxLogEntry(
+            id: UUID(),
+            timestamp: Date(),
+            direction: .incoming,
+            rawBytes: value,
+            decoded: decoded?.displayDescription
+                ?? value.first.map { "Unbekannt: 0x\(String(format: "%02X", $0))" }
+        ))
     }
 
     private func sendInitSequence() {

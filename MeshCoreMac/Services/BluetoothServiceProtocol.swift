@@ -15,6 +15,8 @@ protocol BluetoothServiceProtocol: AnyObject {
     var incomingFrames: AsyncStream<Data> { get }
     /// Dekodierte Node-Ereignisse: selfInfo, nodeAdvert, contact, contactsStart/End.
     var nodeEventStream: AsyncStream<DecodedFrame> { get }
+    /// Alle BLE-Frames (ein- und ausgehend) als Log-Einträge. DiagnosticsViewModel konsumiert diesen Stream.
+    var rxLogStream: AsyncStream<RxLogEntry> { get }
 
     func startScanning()
     func stopScanning()

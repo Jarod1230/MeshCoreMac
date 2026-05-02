@@ -17,6 +17,8 @@ final class MockBluetoothService: BluetoothServiceProtocol {
     private let frameContinuation: AsyncStream<Data>.Continuation
     let nodeEventStream: AsyncStream<DecodedFrame>
     private let nodeEventContinuation: AsyncStream<DecodedFrame>.Continuation
+    let rxLogStream: AsyncStream<RxLogEntry>
+    private let rxLogContinuation: AsyncStream<RxLogEntry>.Continuation
 
     var sentFrames: [Data] = []
     var scanStarted = false
@@ -29,6 +31,9 @@ final class MockBluetoothService: BluetoothServiceProtocol {
         let (nodeStream, nodeCont) = AsyncStream<DecodedFrame>.makeStream()
         self.nodeEventStream = nodeStream
         self.nodeEventContinuation = nodeCont
+        let (logStream, logCont) = AsyncStream<RxLogEntry>.makeStream()
+        self.rxLogStream = logStream
+        self.rxLogContinuation = logCont
     }
 
     func startScanning() { scanStarted = true }
@@ -56,6 +61,10 @@ final class MockBluetoothService: BluetoothServiceProtocol {
         nodeEventContinuation.yield(frame)
     }
 
+    func simulateRxLogEntry(_ entry: RxLogEntry) {
+        rxLogContinuation.yield(entry)
+    }
+
     func simulateDisconnect() {
         connectionState = .failed(peripheralName: "Mock-Node", error: "Verbindung verloren")
     }
@@ -67,5 +76,6 @@ final class MockBluetoothService: BluetoothServiceProtocol {
     deinit {
         frameContinuation.finish()
         nodeEventContinuation.finish()
+        rxLogContinuation.finish()
     }
 }

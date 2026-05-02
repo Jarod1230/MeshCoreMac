@@ -10,20 +10,23 @@ struct NodeStatusView: View {
                 if let batt = diagnosticsVM.batteryPercent {
                     LabeledContent("Batterie") {
                         HStack {
-                            ProgressView(value: Double(batt), total: 100)
-                                .frame(width: 80)
+                            ProgressView(value: Double(batt), total: 100).frame(width: 80)
                             Text("\(batt)%")
                                 .monospacedDigit()
+                            if let mv = diagnosticsVM.voltageMillivolts {
+                                Text("(\(String(format: "%.2f", Double(mv)/1000))V)")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 } else {
                     LabeledContent("Batterie", value: "–")
                 }
-
-                if let used = diagnosticsVM.storageUsed,
-                   let free = diagnosticsVM.storageFree {
-                    LabeledContent("Belegt", value: formatBytes(used))
-                    LabeledContent("Frei", value: formatBytes(free))
+                if let usedKB = diagnosticsVM.storageUsedKB,
+                   let totalKB = diagnosticsVM.storageTotalKB {
+                    LabeledContent("Belegt", value: "\(usedKB) KB")
+                    LabeledContent("Gesamt", value: "\(totalKB) KB")
                 } else {
                     LabeledContent("Speicher", value: "–")
                 }
@@ -51,9 +54,5 @@ struct NodeStatusView: View {
         .formStyle(.grouped)
     }
 
-    private func formatBytes(_ bytes: Int) -> String {
-        if bytes >= 1_048_576 { return String(format: "%.1f MB", Double(bytes) / 1_048_576) }
-        if bytes >= 1024 { return String(format: "%.1f KB", Double(bytes) / 1024) }
-        return "\(bytes) B"
-    }
+
 }

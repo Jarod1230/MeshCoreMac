@@ -23,7 +23,9 @@ final class ChatViewModelTests: XCTestCase {
         try await vm.send(text: "Hallo")
         XCTAssertEqual(mockBluetooth.sentFrames.count, 1)
         let frame = mockBluetooth.sentFrames[0]
-        XCTAssertEqual(frame[0], MeshCoreProtocol.Command.sendTxtMsg.rawValue)
+        XCTAssertEqual(frame[0], MeshCoreProtocol.Command.sendChannelTxtMsg.rawValue)
+        XCTAssertEqual(frame[1], 0x00)
+        XCTAssertEqual(frame[2], 0x00)
     }
 
     func testSendMessage_savesToStore() async throws {
@@ -48,15 +50,16 @@ final class ChatViewModelTests: XCTestCase {
         await vm.loadMessages()
         var frameBytes: [UInt8] = [
             MeshCoreProtocol.Response.channelMsgRecv.rawValue,
-            0x00, 0x01, 0xF8
+            0x00, 0x01, 0x00,
+            0x00, 0x00, 0x00, 0x00
         ]
         frameBytes += Array("Incoming".utf8)
         mockBluetooth.simulateIncomingFrame(Data(frameBytes))
-        // Dem AsyncStream-Consumer Zeit zum Laufen geben
-        for _ in 0..<10 {
+        for _ in 0..<20 {
             await Task.yield()
             if !vm.messages.isEmpty { break }
         }
         XCTAssertFalse(vm.messages.isEmpty)
+        XCTAssertEqual(vm.messages.first?.text, "Incoming")
     }
 }

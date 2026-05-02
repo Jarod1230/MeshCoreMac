@@ -47,8 +47,6 @@ enum MeshCoreProtocol {
         case endOfContacts     = 0x04  // END_OF_CONTACTS
         /// PACKET_SELF_INFO: [advert_type:1][tx_pwr:1][max_tx_pwr:1][pubkey:32]
         /// [lat_i32_le÷1e6:4][lon_i32_le÷1e6:4][flags…:10][name:variable from byte 58]
-        /// PHASE4: Decoder liest aktuell float32 bei Offset 36–43 und Name ab Byte 48.
-        /// Korrekt wäre int32÷1e6 bei Offset 36–43 und Name ab Byte 58.
         case selfInfo          = 0x05  // PACKET_SELF_INFO
         case sent              = 0x06  // PACKET_MSG_SENT: [route_flag:1][tag:4][timeout_ms:4]
         case contactMsgRecv    = 0x07  // PACKET_CONTACT_MSG_RECV: [pubkey_prefix:6][path_len:1][txt_type:1][ts:4][msg]
@@ -124,22 +122,20 @@ enum MeshCoreProtocol {
 
 /// Strukturiertes Ergebnis nach erfolgreichem Frame-Decode.
 enum DecodedFrame: Sendable, Equatable {
-    /// Eigene Node-Info (SELF_INFO 0x05).
-    /// PHASE4: lat/lon werden aktuell aus float32 gelesen; korrekt wäre int32÷1e6 ab Byte 36.
-    case selfInfo(nodeId: String, lat: Double?, lon: Double?, firmware: String)
+    case selfInfo(nodeId: String, lat: Double?, lon: Double?, firmware: String,
+                  radioFrequencyHz: UInt32, radioBandwidthHz: UInt32,
+                  radioSpreadingFactor: UInt8, radioCodingRate: UInt8)
+    case deviceInfo(NodeInfo)
     case newChannelMessage(MeshMessage)
     case newDirectMessage(MeshMessage)
     case messageAck(messageId: String)
-    /// Werbung eines anderen Nodes (ADVERT 0x80, PATH_UPDATED 0x81).
-    /// PHASE4: lat/lon kommen erst ab Appdata-Byte 100 mit Flags — werden aktuell falsch gelesen.
     case nodeAdvert(contactId: String, name: String?, lat: Double?, lon: Double?)
     /// Ein Kontakt aus der GET_CONTACTS-Sequenz (CONTACT 0x03).
     case contact(MeshContact)
     case contactsStart
     case contactsEnd
-    /// Batterie und Speicher (PACKET_BATTERY 0x0C).
-    /// PHASE4: Spec: battery=voltage_mV (16-bit LE), storageUsed/storageFree in KB; aktuell falsch.
-    case battAndStorage(battery: Int, storageUsed: Int, storageFree: Int)
+    /// Spec-korrekte Labels: voltageMillivolts, storageUsedKB, storageTotalKB
+    case battAndStorage(voltageMillivolts: Int, storageUsedKB: Int, storageTotalKB: Int)
     /// RF-Status (Push 0x87).
     case noiseFloor(rssi: Int, noise: Int)
     /// Kanal-Info (PACKET_CHANNEL_INFO 0x12): Name und Secret eines Kanals.
@@ -160,9 +156,11 @@ enum ProtocolError: Error, Equatable, Sendable {
 extension DecodedFrame {
     var displayDescription: String {
         switch self {
-        case .selfInfo(let nodeId, let lat, _, let firmware):
+        case .selfInfo(let nodeId, let lat, _, let firmware, let freqHz, _, let sf, _):
             let pos = lat.map { String(format: "%.4f", $0) } ?? "-"
-            return "SELF_INFO node=\(nodeId) lat=\(pos) fw=\(firmware)"
+            return "SELF_INFO node=\(nodeId) lat=\(pos) fw=\(firmware) \(freqHz/1000)kHz SF\(sf)"
+        case .deviceInfo(let info):
+            return "DEVICE_INFO model=\(info.model) fw=\(info.firmwareVersion) ch=\(info.maxChannels)"
         case .newChannelMessage(let msg):
             if case .channel(let idx) = msg.kind {
                 return "CH_MSG ch=\(idx) hops=\(msg.routing?.hops ?? 0) '\(msg.text.prefix(40))'"
@@ -181,8 +179,8 @@ extension DecodedFrame {
             return "CONTACTS_START"
         case .contactsEnd:
             return "CONTACTS_END"
-        case .battAndStorage(let batt, let used, let free):
-            return "BATT_STORAGE batt=\(batt)% used=\(used)B free=\(free)B"
+        case .battAndStorage(let mv, let usedKB, let totalKB):
+            return "BATTERY \(mv)mV used=\(usedKB)KB total=\(totalKB)KB"
         case .noiseFloor(let rssi, let noise):
             return "STATUS rssi=\(rssi)dBm noise=\(noise)dBm"
         case .channelInfo(let idx, let name, _):

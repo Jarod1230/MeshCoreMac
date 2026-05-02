@@ -16,17 +16,16 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
         XCTAssertEqual(frame[0], MeshCoreProtocol.Command.deviceQuery.rawValue)
     }
 
-    func testEncodeSendTextMessage_containsText() throws {
+    func testEncodeChannelMessage_correctFormat() throws {
         let text = "Hallo Mesh"
-        let channelIndex: UInt8 = 0
         let frame = try MeshCoreProtocolService.encodeSendTextMessage(
-            text: text, channelIndex: channelIndex, recipientId: nil
+            text: text, channelIndex: 1, recipientId: nil
         )
-        XCTAssertGreaterThan(frame.count, 2)
-        XCTAssertEqual(frame[0], MeshCoreProtocol.Command.sendTxtMsg.rawValue)
-        // Text-Payload nach Command-Byte und Channel-Byte
-        let textData = Data(frame.dropFirst(2))
-        XCTAssertEqual(String(data: textData, encoding: .utf8), text)
+        XCTAssertEqual(frame[0], MeshCoreProtocol.Command.sendChannelTxtMsg.rawValue)
+        XCTAssertEqual(frame[1], 0x00)
+        XCTAssertEqual(frame[2], 0x01)
+        let msgData = Data(frame.dropFirst(7))
+        XCTAssertEqual(String(data: msgData, encoding: .utf8), text)
     }
 
     func testEncodeSendTextMessage_throwsOnOverlongText() {
@@ -36,28 +35,6 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
                 text: longText, channelIndex: 0, recipientId: nil
             )
         )
-    }
-
-    func testDecodeNewMessage_parsesCorrectly() throws {
-        // Synthetischer NEW_MSG-Frame: [CMD][channelIdx][hops][snr_raw][utf8_text]
-        var frameBytes: [UInt8] = [
-            MeshCoreProtocol.Response.channelMsgRecv.rawValue,
-            0x00,   // channelIndex = 0
-            0x02,   // hops = 2
-            0xF8,   // snr raw byte (signed: -8)
-        ]
-        frameBytes += Array("Hallo".utf8)
-        let frame = Data(frameBytes)
-
-        let decoded = try MeshCoreProtocolService.decodeFrame(frame)
-        guard case .newChannelMessage(let msg) = decoded else {
-            return XCTFail("Expected newChannelMessage, got \(decoded)")
-        }
-        XCTAssertEqual(msg.text, "Hallo")
-        XCTAssertEqual(msg.routing?.hops, 2)
-        XCTAssertEqual(msg.routing?.snr ?? 0, -8.0, accuracy: 1.0)
-        guard case .channel(let idx) = msg.kind else { return XCTFail() }
-        XCTAssertEqual(idx, 0)
     }
 
     func testDecodeUnknownFrame_throwsError() {
@@ -72,47 +49,40 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
     }
 
     func testDecodeSelfInfo_parsesNodeIdAndPosition() throws {
-        // SELF_INFO payload: [pubkey:32][ts:4][lat_f32_le:4][lon_f32_le:4][alt:4][name]
-        var bytes = [UInt8](repeating: 0xAA, count: 32) // pubkey — first 4 bytes become nodeId
-        bytes += [0x00, 0x00, 0x00, 0x00]               // timestamp
-        // lat = 48.137  → Float32 little-endian
-        let latFloat = Float(48.137)
-        let latBits = latFloat.bitPattern
-        bytes += [UInt8(latBits & 0xFF), UInt8((latBits >> 8) & 0xFF),
-                  UInt8((latBits >> 16) & 0xFF), UInt8((latBits >> 24) & 0xFF)]
-        // lon = 11.575
-        let lonFloat = Float(11.575)
-        let lonBits = lonFloat.bitPattern
-        bytes += [UInt8(lonBits & 0xFF), UInt8((lonBits >> 8) & 0xFF),
-                  UInt8((lonBits >> 16) & 0xFF), UInt8((lonBits >> 24) & 0xFF)]
-        bytes += [0x00, 0x00, 0x00, 0x00]               // alt
+        var bytes: [UInt8] = [0x01, 0x14, 0x14]
+        bytes += [UInt8](repeating: 0xAA, count: 32)
+        let lat_i32 = Int32(48.137 * 1_000_000)
+        bytes += [UInt8(lat_i32 & 0xFF), UInt8((lat_i32 >> 8) & 0xFF),
+                  UInt8((lat_i32 >> 16) & 0xFF), UInt8((lat_i32 >> 24) & 0xFF)]
+        let lon_i32 = Int32(11.575 * 1_000_000)
+        bytes += [UInt8(lon_i32 & 0xFF), UInt8((lon_i32 >> 8) & 0xFF),
+                  UInt8((lon_i32 >> 16) & 0xFF), UInt8((lon_i32 >> 24) & 0xFF)]
+        bytes += [UInt8](repeating: 0x00, count: 14)
         bytes += Array("MyNode".utf8)
         var frame = [MeshCoreProtocol.Response.selfInfo.rawValue]
         frame += bytes
         let decoded = try MeshCoreProtocolService.decodeFrame(Data(frame))
-        guard case .selfInfo(let nodeId, let lat, let lon, let firmware) = decoded else {
+        guard case .selfInfo(let nodeId, let lat, let lon, let firmware, _, _, _, _) = decoded else {
             return XCTFail("Expected .selfInfo, got \(decoded)")
         }
         XCTAssertEqual(nodeId, "aaaaaaaa")
-        XCTAssertEqual(lat ?? 0, 48.137, accuracy: 0.01)
-        XCTAssertEqual(lon ?? 0, 11.575, accuracy: 0.01)
+        XCTAssertEqual(lat ?? 0, 48.137, accuracy: 0.001)
+        XCTAssertEqual(lon ?? 0, 11.575, accuracy: 0.001)
         XCTAssertEqual(firmware, "MyNode")
     }
 
-    func testDecodeAdvert_parsesContactIdAndPosition() throws {
-        // ADVERT payload same format as SELF_INFO
-        var bytes = [UInt8](repeating: 0xBB, count: 32) // pubkey
-        bytes += [0x00, 0x00, 0x00, 0x00]               // timestamp
-        let latFloat = Float(52.52)
-        let latBits = latFloat.bitPattern
-        bytes += [UInt8(latBits & 0xFF), UInt8((latBits >> 8) & 0xFF),
-                  UInt8((latBits >> 16) & 0xFF), UInt8((latBits >> 24) & 0xFF)]
-        let lonFloat = Float(13.405)
-        let lonBits = lonFloat.bitPattern
-        bytes += [UInt8(lonBits & 0xFF), UInt8((lonBits >> 8) & 0xFF),
-                  UInt8((lonBits >> 16) & 0xFF), UInt8((lonBits >> 24) & 0xFF)]
-        bytes += [0x00, 0x00, 0x00, 0x00]               // alt
-        bytes += Array("Berlin".utf8) + [0x00]          // NUL-terminated name
+    func testDecodeAdvert_parsesContactIdAndName() throws {
+        var bytes = [UInt8](repeating: 0xBB, count: 32)
+        bytes += [0x00, 0x00, 0x00, 0x00]
+        bytes += [UInt8](repeating: 0x00, count: 64)
+        bytes += [0x90]  // flags: 0x10 (lat/lon) | 0x80 (name)
+        let lat_i32 = Int32(52.52 * 1_000_000)
+        bytes += [UInt8(lat_i32 & 0xFF), UInt8((lat_i32 >> 8) & 0xFF),
+                  UInt8((lat_i32 >> 16) & 0xFF), UInt8((lat_i32 >> 24) & 0xFF)]
+        let lon_i32 = Int32(13.405 * 1_000_000)
+        bytes += [UInt8(lon_i32 & 0xFF), UInt8((lon_i32 >> 8) & 0xFF),
+                  UInt8((lon_i32 >> 16) & 0xFF), UInt8((lon_i32 >> 24) & 0xFF)]
+        bytes += Array("Berlin".utf8) + [0x00]
         var frame = [MeshCoreProtocol.Push.advert.rawValue]
         frame += bytes
         let decoded = try MeshCoreProtocolService.decodeFrame(Data(frame))
@@ -121,8 +91,74 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
         }
         XCTAssertEqual(contactId, "bbbbbbbb")
         XCTAssertEqual(name, "Berlin")
-        XCTAssertEqual(lat ?? 0, 52.52, accuracy: 0.01)
-        XCTAssertEqual(lon ?? 0, 13.405, accuracy: 0.01)
+        XCTAssertEqual(lat ?? 0, 52.52, accuracy: 0.001)
+        XCTAssertEqual(lon ?? 0, 13.405, accuracy: 0.001)
+    }
+
+    func testDecodeDeviceInfo_parsesCorrectly() throws {
+        var bytes: [UInt8] = [0x05, 0x19, 0x08]
+        bytes += [0x00, 0x00, 0x00, 0x00]
+        var build = Array("build-abc".utf8); while build.count < 12 { build.append(0) }
+        var model = Array("RepeatStar".utf8); while model.count < 40 { model.append(0) }
+        var version = Array("1.2.3".utf8); while version.count < 20 { version.append(0) }
+        bytes += build + model + version
+        var frame = [MeshCoreProtocol.Response.deviceInfo.rawValue]
+        frame += bytes
+        let decoded = try MeshCoreProtocolService.decodeFrame(Data(frame))
+        guard case .deviceInfo(let info) = decoded else {
+            return XCTFail("Expected .deviceInfo, got \(decoded)")
+        }
+        XCTAssertEqual(info.firmwareVersion, 5)
+        XCTAssertEqual(info.maxContacts, 50)
+        XCTAssertEqual(info.maxChannels, 8)
+        XCTAssertEqual(info.firmwareBuild, "build-abc")
+        XCTAssertEqual(info.model, "RepeatStar")
+        XCTAssertEqual(info.version, "1.2.3")
+    }
+
+    func testDecodeBattAndStorage_valid() throws {
+        var frame = Data([MeshCoreProtocol.Response.battAndStorage.rawValue])
+        frame.append(contentsOf: [0x70, 0x0E])       // 0x0E70 = 3696mV
+        frame.append(contentsOf: [0x00, 0x10, 0x00, 0x00])  // 4096 KB
+        frame.append(contentsOf: [0x00, 0x20, 0x00, 0x00])  // 8192 KB
+        let decoded = try MeshCoreProtocolService.decodeFrame(frame)
+        guard case .battAndStorage(let mv, let used, let total) = decoded else {
+            XCTFail("Expected .battAndStorage"); return
+        }
+        XCTAssertEqual(mv, 3696)
+        XCTAssertEqual(used, 4096)
+        XCTAssertEqual(total, 8192)
+    }
+
+    func testDecodeChannelMessage_parsesCorrectly() throws {
+        var bytes: [UInt8] = [0x01, 0x02, 0x00]
+        bytes += [0x00, 0x00, 0x00, 0x00]
+        bytes += Array("Hello".utf8)
+        var frame = [MeshCoreProtocol.Response.channelMsgRecv.rawValue]
+        frame += bytes
+        let decoded = try MeshCoreProtocolService.decodeFrame(Data(frame))
+        guard case .newChannelMessage(let msg) = decoded else {
+            return XCTFail("Expected .newChannelMessage")
+        }
+        XCTAssertEqual(msg.text, "Hello")
+        XCTAssertEqual(msg.routing?.hops, 2)
+        guard case .channel(let idx) = msg.kind else { return XCTFail() }
+        XCTAssertEqual(idx, 1)
+    }
+
+    func testDecodeChannelMessageV3_includesSNR() throws {
+        let snrRaw = Int8(-12)
+        var bytes: [UInt8] = [UInt8(bitPattern: snrRaw), 0x00, 0x00, 0x00, 0x01, 0x00]
+        bytes += [0x00, 0x00, 0x00, 0x00]
+        bytes += Array("V3".utf8)
+        var frame = [MeshCoreProtocol.ResponseV3.channelMsgRecvV3.rawValue]
+        frame += bytes
+        let decoded = try MeshCoreProtocolService.decodeFrame(Data(frame))
+        guard case .newChannelMessage(let msg) = decoded else {
+            return XCTFail("Expected .newChannelMessage")
+        }
+        XCTAssertEqual(msg.text, "V3")
+        XCTAssertEqual(msg.routing?.snr ?? 0, -3.0, accuracy: 0.01)
     }
 
     func testDecodeContact_parsesNameAndOnlineFlag() throws {
@@ -152,21 +188,6 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
         let frame = Data([MeshCoreProtocol.Response.contactsStart.rawValue])
         let decoded = try MeshCoreProtocolService.decodeFrame(frame)
         XCTAssertEqual(decoded, .contactsStart)
-    }
-
-    func testDecodeBattAndStorage_valid() throws {
-        // battery=75%, storageUsed=1024B, storageFree=8192B
-        var frame = Data([MeshCoreProtocol.Response.battAndStorage.rawValue])
-        frame.append(75)                                          // battery percent
-        frame.append(contentsOf: [0x00, 0x04, 0x00, 0x00])       // 1024 LE uint32
-        frame.append(contentsOf: [0x00, 0x20, 0x00, 0x00])       // 8192 LE uint32
-        let decoded = try MeshCoreProtocolService.decodeFrame(frame)
-        guard case .battAndStorage(let batt, let used, let free) = decoded else {
-            XCTFail("Expected .battAndStorage"); return
-        }
-        XCTAssertEqual(batt, 75)
-        XCTAssertEqual(used, 1024)
-        XCTAssertEqual(free, 8192)
     }
 
     func testDecodeNoiseFloor_valid() throws {

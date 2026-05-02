@@ -46,10 +46,12 @@ final class ContactsViewModel {
 
     private func handleNodeEvent(_ frame: DecodedFrame) async {
         switch frame {
-        case .selfInfo(_, let lat, let lon, _):
+        case .selfInfo(_, let lat, let lon, _, _, _, _, _):
             if let lat = lat, let lon = lon {
                 ownPosition = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
+        case .deviceInfo:
+            break   // wird in Task 4 implementiert
         case .nodeAdvert(let contactId, let name, let lat, let lon):
             var c = contacts.first(where: { $0.id == contactId })
                 ?? MeshContact(id: contactId, name: name ?? contactId,

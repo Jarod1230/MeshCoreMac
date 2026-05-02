@@ -72,17 +72,19 @@ final class DiagnosticsViewModelTests: XCTestCase {
     }
 
     func testHandleEntry_battAndStorage_updatesBatteryPercent() async throws {
+        // 3900mV = ~75% LiPo (3.0–4.2V), used=4096KB, total=16384KB
         var frame = Data([MeshCoreProtocol.Response.battAndStorage.rawValue])
-        frame.append(80)
-        frame.append(contentsOf: [0x00, 0x10, 0x00, 0x00])
-        frame.append(contentsOf: [0x00, 0x40, 0x00, 0x00])
+        frame.append(contentsOf: [0x3C, 0x0F])       // 0x0F3C = 3900mV
+        frame.append(contentsOf: [0x00, 0x10, 0x00, 0x00])  // 4096 KB
+        frame.append(contentsOf: [0x00, 0x40, 0x00, 0x00])  // 16384 KB
         let entry = RxLogEntry(id: UUID(), timestamp: Date(),
                                direction: .incoming, rawBytes: frame, decoded: nil)
         mockBluetooth.simulateRxLogEntry(entry)
-        try await waitUntil { self.vm.batteryPercent != nil }
-        XCTAssertEqual(vm.batteryPercent, 80)
-        XCTAssertEqual(vm.storageUsed, 4096)
-        XCTAssertEqual(vm.storageFree, 16384)
+        try await waitUntil { self.vm.voltageMillivolts != nil }
+        XCTAssertEqual(vm.voltageMillivolts, 3900)
+        XCTAssertEqual(vm.storageUsedKB, 4096)
+        XCTAssertEqual(vm.storageTotalKB, 16384)
+        XCTAssertNotNil(vm.batteryPercent)
     }
 
     func testHandleEntry_noiseFloor_updatesNoiseFloor() async throws {

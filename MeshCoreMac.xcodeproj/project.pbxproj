@@ -46,6 +46,7 @@
 		C5FBF3C2437BD08E8CD28986 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95928FC45C3091FB70054481 /* MessageBubbleView.swift */; };
 		CA825F12D21BA67F503B536A /* CLIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0CA0FA6E69FAC7E4CDB4A7 /* CLIView.swift */; };
 		D06D5C25CBC4599D7E346411 /* ContactStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC1AADE3C2ED3C1B53B690A /* ContactStore.swift */; };
+		D08B4F4944DB66626E85E1CB /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA6DBD69A01A298354021B2F /* NodeInfo.swift */; };
 		D83FB62AFAB41BC9C0A565E3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE90A4A21ED0FCBEF6033B11 /* SettingsView.swift */; };
 		D9587A7A8E06FB9BDD0F10A6 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08B3F42D2FB2E3F658CA1F1 /* ContactDetailView.swift */; };
 		DDD3C9980E838614D35AD6D9 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676154334E1F0D348D97CD08 /* ChatViewModel.swift */; };
@@ -111,6 +112,7 @@
 		DDE90144CE883743B27BE6B4 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsView.swift; sourceTree = "<group>"; };
 		E19B2FAB27F3E2D1527926B5 /* ContactRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactRecord.swift; sourceTree = "<group>"; };
 		E6CA77C308698EFBB5FADDA0 /* NodeStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeStatusView.swift; sourceTree = "<group>"; };
+		EA6DBD69A01A298354021B2F /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		EB2CF6759987268F33BCC0E1 /* RxLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxLogEntry.swift; sourceTree = "<group>"; };
 		F08B3F42D2FB2E3F658CA1F1 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		F252B6593A207542FC33F629 /* MeshChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshChannel.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				F252B6593A207542FC33F629 /* MeshChannel.swift */,
 				C1161B50A49EB13D5F04A483 /* MeshContact.swift */,
 				8E2E7D792B46449387D7CCF5 /* MeshMessage.swift */,
+				EA6DBD69A01A298354021B2F /* NodeInfo.swift */,
 				EB2CF6759987268F33BCC0E1 /* RxLogEntry.swift */,
 			);
 			path = Models;
@@ -453,6 +456,7 @@
 				C5FBF3C2437BD08E8CD28986 /* MessageBubbleView.swift in Sources */,
 				B551983ED848D109C61593DB /* MessageStore.swift in Sources */,
 				1AEE1922B696E865C7105755 /* MessageStoreRecord.swift in Sources */,
+				D08B4F4944DB66626E85E1CB /* NodeInfo.swift in Sources */,
 				04F00C944D2F68FDEDB18870 /* NodeStatusView.swift in Sources */,
 				0E617710ECB95FE7AC5FAF49 /* NotificationService.swift in Sources */,
 				85BC5BE5669E035D5503038A /* PairingView.swift in Sources */,

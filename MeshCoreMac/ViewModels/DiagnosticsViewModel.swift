@@ -16,11 +16,17 @@ final class DiagnosticsViewModel {
     }
 
     private(set) var logEntries: [RxLogEntry] = []
-    private(set) var batteryPercent: Int? = nil
-    private(set) var storageUsed: Int? = nil
-    private(set) var storageFree: Int? = nil
+    private(set) var voltageMillivolts: Int? = nil
+    private(set) var storageUsedKB: Int? = nil
+    private(set) var storageTotalKB: Int? = nil
     private(set) var rssi: Int? = nil
     private(set) var noiseFloor: Int? = nil
+
+    var batteryPercent: Int? {
+        guard let mv = voltageMillivolts else { return nil }
+        // LiPo: 3.0V = 0%, 4.2V = 100%
+        return min(100, max(0, Int(Float(mv - 3000) / 12.0)))
+    }
 
     var cliInput: String = ""
     private(set) var cliHistory: [String] = []
@@ -85,10 +91,10 @@ final class DiagnosticsViewModel {
         guard entry.direction == .incoming,
               let decoded = try? MeshCoreProtocolService.decodeFrame(entry.rawBytes) else { return }
         switch decoded {
-        case .battAndStorage(let batt, let used, let free):
-            batteryPercent = batt
-            storageUsed = used
-            storageFree = free
+        case .battAndStorage(let mv, let usedKB, let totalKB):
+            voltageMillivolts = mv
+            storageUsedKB = usedKB
+            storageTotalKB = totalKB
         case .noiseFloor(let r, let n):
             rssi = r
             noiseFloor = n

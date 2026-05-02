@@ -55,7 +55,9 @@ final class ContactsViewModelTests: XCTestCase {
 
     func testSelfInfo_setsOwnPosition() async throws {
         mockBluetooth.simulateNodeEvent(
-            .selfInfo(nodeId: "aa11bb22", lat: 52.52, lon: 13.405, firmware: "v1.0")
+            .selfInfo(nodeId: "aa11bb22", lat: 52.52, lon: 13.405, firmware: "v1.0",
+                      radioFrequencyHz: 0, radioBandwidthHz: 0,
+                      radioSpreadingFactor: 0, radioCodingRate: 0)
         )
         try await waitUntil { self.vm.ownPosition != nil }
         XCTAssertEqual(vm.ownPosition?.latitude ?? 0, 52.52, accuracy: 0.001)

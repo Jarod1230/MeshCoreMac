@@ -153,4 +153,41 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
         let decoded = try MeshCoreProtocolService.decodeFrame(frame)
         XCTAssertEqual(decoded, .contactsStart)
     }
+
+    func testDecodeBattAndStorage_valid() throws {
+        // battery=75%, storageUsed=1024B, storageFree=8192B
+        var frame = Data([MeshCoreProtocol.Response.battAndStorage.rawValue])
+        frame.append(75)                                          // battery percent
+        frame.append(contentsOf: [0x00, 0x04, 0x00, 0x00])       // 1024 LE uint32
+        frame.append(contentsOf: [0x00, 0x20, 0x00, 0x00])       // 8192 LE uint32
+        let decoded = try MeshCoreProtocolService.decodeFrame(frame)
+        guard case .battAndStorage(let batt, let used, let free) = decoded else {
+            XCTFail("Expected .battAndStorage"); return
+        }
+        XCTAssertEqual(batt, 75)
+        XCTAssertEqual(used, 1024)
+        XCTAssertEqual(free, 8192)
+    }
+
+    func testDecodeNoiseFloor_valid() throws {
+        var frame = Data([MeshCoreProtocol.Push.statusResponse.rawValue])
+        frame.append(UInt8(bitPattern: Int8(-80)))
+        frame.append(UInt8(bitPattern: Int8(-110)))
+        let decoded = try MeshCoreProtocolService.decodeFrame(frame)
+        guard case .noiseFloor(let rssi, let noise) = decoded else {
+            XCTFail("Expected .noiseFloor"); return
+        }
+        XCTAssertEqual(rssi, -80)
+        XCTAssertEqual(noise, -110)
+    }
+
+    func testEncodeTracePath_producesCorrectBytes() {
+        let data = MeshCoreProtocolService.encodeTracePath(contactId: "a1b2c3d4")
+        XCTAssertEqual(data[0], MeshCoreProtocol.Command.tracePath.rawValue)
+        XCTAssertEqual(data.count, 5)
+        XCTAssertEqual(data[1], 0xa1)
+        XCTAssertEqual(data[2], 0xb2)
+        XCTAssertEqual(data[3], 0xc3)
+        XCTAssertEqual(data[4], 0xd4)
+    }
 }

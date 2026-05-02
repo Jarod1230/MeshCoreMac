@@ -30,6 +30,7 @@ enum MeshCoreProtocol {
         case sendChannelTxtMsg  = 0x03  // CMD_SEND_CHANNEL_TXT_MSG
         case getContacts        = 0x04  // CMD_GET_CONTACTS
         case getDeviceTime      = 0x05  // CMD_GET_DEVICE_TIME
+        case tracePath          = 0x07  // CMD_TRACE_PATH — VERIFY: cmd byte unconfirmed
         case syncNextMessage    = 0x0A  // CMD_SYNC_NEXT_MESSAGE
         case getBattAndStorage  = 0x14  // CMD_GET_BATT_AND_STORAGE
         case deviceQuery        = 0x16  // CMD_DEVICE_QUERY (22)
@@ -109,6 +110,12 @@ enum DecodedFrame: Sendable, Equatable {
     case contactsStart
     /// Endsignal der GET_CONTACTS-Antwort (END_OF_CONTACTS 0x04).
     case contactsEnd
+    /// Batterie-Ladezustand und Speicherinfo (RESP_BATT_AND_STORAGE 0x0C).
+    /// Format: [battery_pct:1][storage_used_le32:4][storage_free_le32:4] — VERIFY
+    case battAndStorage(battery: Int, storageUsed: Int, storageFree: Int)
+    /// RF-Status (PUSH_STATUS_RESPONSE 0x87): RSSI und Noise Floor in dBm.
+    /// Format: [rssi_i8:1][noise_i8:1] — VERIFY
+    case noiseFloor(rssi: Int, noise: Int)
 }
 
 // MARK: - Fehler
@@ -118,4 +125,38 @@ enum ProtocolError: Error, Equatable, Sendable {
     case unknownCommand(UInt8)
     case invalidPayload(String)
     case messageTooLong(Int)
+}
+
+// MARK: - Display
+
+extension DecodedFrame {
+    var displayDescription: String {
+        switch self {
+        case .selfInfo(let nodeId, let lat, _, let firmware):
+            let pos = lat.map { String(format: "%.4f", $0) } ?? "-"
+            return "SELF_INFO node=\(nodeId) lat=\(pos) fw=\(firmware)"
+        case .newChannelMessage(let msg):
+            if case .channel(let idx) = msg.kind {
+                return "CH_MSG ch=\(idx) hops=\(msg.routing?.hops ?? 0) '\(msg.text.prefix(40))'"
+            }
+            return "CH_MSG '\(msg.text.prefix(40))'"
+        case .newDirectMessage(let msg):
+            return "DM from=\(msg.senderName) hops=\(msg.routing?.hops ?? 0) '\(msg.text.prefix(40))'"
+        case .messageAck(let id):
+            return "ACK id=\(id.prefix(8))"
+        case .nodeAdvert(let cid, let name, let lat, _):
+            let pos = lat.map { String(format: "%.4f", $0) } ?? "-"
+            return "ADVERT id=\(cid) name=\(name ?? "-") lat=\(pos)"
+        case .contact(let c):
+            return "CONTACT id=\(c.id) name=\(c.name) online=\(c.isOnline)"
+        case .contactsStart:
+            return "CONTACTS_START"
+        case .contactsEnd:
+            return "CONTACTS_END"
+        case .battAndStorage(let batt, let used, let free):
+            return "BATT_STORAGE batt=\(batt)% used=\(used)B free=\(free)B"
+        case .noiseFloor(let rssi, let noise):
+            return "STATUS rssi=\(rssi)dBm noise=\(noise)dBm"
+        }
+    }
 }

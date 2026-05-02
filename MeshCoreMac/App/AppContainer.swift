@@ -9,6 +9,7 @@ final class AppContainer {
     let connectionViewModel: ConnectionViewModel
     let sidebarViewModel: SidebarViewModel
     let contactsViewModel: ContactsViewModel
+    let diagnosticsViewModel: DiagnosticsViewModel
     let notificationService: NotificationService
 
     init() throws {
@@ -18,6 +19,7 @@ final class AppContainer {
         connectionViewModel = ConnectionViewModel(bluetoothService: bluetoothService)
         sidebarViewModel = SidebarViewModel()
         contactsViewModel = ContactsViewModel(contactStore: contactStore, bluetoothService: bluetoothService)
+        diagnosticsViewModel = DiagnosticsViewModel(bluetoothService: bluetoothService)
         notificationService = NotificationService()
     }
 

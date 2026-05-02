@@ -119,3 +119,33 @@ enum ProtocolError: Error, Equatable, Sendable {
     case invalidPayload(String)
     case messageTooLong(Int)
 }
+
+// MARK: - Display
+
+extension DecodedFrame {
+    var displayDescription: String {
+        switch self {
+        case .selfInfo(let nodeId, let lat, _, let firmware):
+            let pos = lat.map { String(format: "%.4f", $0) } ?? "-"
+            return "SELF_INFO node=\(nodeId) lat=\(pos) fw=\(firmware)"
+        case .newChannelMessage(let msg):
+            if case .channel(let idx) = msg.kind {
+                return "CH_MSG ch=\(idx) hops=\(msg.routing?.hops ?? 0) '\(msg.text.prefix(40))'"
+            }
+            return "CH_MSG '\(msg.text.prefix(40))'"
+        case .newDirectMessage(let msg):
+            return "DM from=\(msg.senderName) hops=\(msg.routing?.hops ?? 0) '\(msg.text.prefix(40))'"
+        case .messageAck(let id):
+            return "ACK id=\(id.prefix(8))"
+        case .nodeAdvert(let cid, let name, let lat, _):
+            let pos = lat.map { String(format: "%.4f", $0) } ?? "-"
+            return "ADVERT id=\(cid) name=\(name ?? "-") lat=\(pos)"
+        case .contact(let c):
+            return "CONTACT id=\(c.id) name=\(c.name) online=\(c.isOnline)"
+        case .contactsStart:
+            return "CONTACTS_START"
+        case .contactsEnd:
+            return "CONTACTS_END"
+        }
+    }
+}

@@ -10,15 +10,15 @@ struct SidebarView: View {
 
     var body: some View {
         List(selection: Binding(
-            get: { sidebarVM.selectedConversation.map(ConversationID.init) },
-            set: { id in
-                if let kind = id?.kind { sidebarVM.selectConversation(kind) }
+            get: { sidebarVM.selectedConversation },
+            set: { kind in
+                if let kind { sidebarVM.selectConversation(kind) }
             }
         )) {
             Section("Kanäle") {
                 ForEach(sidebarVM.channels) { channel in
                     Label("# \(channel.name)", systemImage: "number")
-                        .tag(ConversationID(kind: .channel(index: channel.id)))
+                        .tag(MeshMessage.Kind.channel(index: channel.id))
                 }
             }
 
@@ -27,7 +27,7 @@ struct SidebarView: View {
                     ForEach(contactsVM.contacts) { contact in
                         HStack {
                             Label(contact.name, systemImage: "person.fill")
-                                .tag(ConversationID(kind: .direct(contactId: contact.id)))
+                                .tag(MeshMessage.Kind.direct(contactId: contact.id))
                             Spacer()
                             Circle()
                                 .fill(contact.isOnline ? Color.green : Color.red)
@@ -66,8 +66,4 @@ struct SidebarView: View {
             }
         }
     }
-}
-
-struct ConversationID: Hashable {
-    let kind: MeshMessage.Kind
 }

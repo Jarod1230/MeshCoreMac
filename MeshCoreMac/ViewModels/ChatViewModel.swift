@@ -121,7 +121,7 @@ final class ChatViewModel {
                 }
 
             case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd,
-                 .battAndStorage, .noiseFloor:
+                 .battAndStorage, .noiseFloor, .channelInfo:
                 break
             }
         } catch {

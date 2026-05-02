@@ -86,7 +86,7 @@ final class ContactsViewModel {
                 pendingContacts = []
             }
         case .newChannelMessage, .newDirectMessage, .messageAck,
-             .battAndStorage, .noiseFloor:
+             .battAndStorage, .noiseFloor, .channelInfo:
             break
         }
     }

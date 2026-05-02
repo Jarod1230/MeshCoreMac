@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct CLIView: View {
-    let diagnosticsVM: DiagnosticsViewModel
+    @Bindable var diagnosticsVM: DiagnosticsViewModel
     @State private var errorMessage: String? = nil
 
     private let quickCommands: [(label: String, hex: String, description: String)] = [
@@ -47,12 +47,8 @@ struct CLIView: View {
             Divider()
 
             HStack(alignment: .center, spacing: 8) {
-                let inputBinding = Binding(
-                    get: { diagnosticsVM.cliInput },
-                    set: { diagnosticsVM.cliInput = $0 }
-                )
                 TextField("Hex-Bytes eingeben (z.B. 04  oder  07 A1 B2 C3 D4)",
-                          text: inputBinding)
+                          text: $diagnosticsVM.cliInput)
                     .font(.system(.body, design: .monospaced))
                     .textFieldStyle(.plain)
                     .padding(.horizontal, 8)

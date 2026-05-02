@@ -6,6 +6,7 @@ struct MainWindowView: View {
 
     @State private var dismissedError: String? = nil
     @State private var showingMap = false
+    @State private var showingDiagnostics = false
 
     var body: some View {
         Group {
@@ -43,6 +44,16 @@ struct MainWindowView: View {
                     }
             }
         }
+        .sheet(isPresented: $showingDiagnostics) {
+            NavigationStack {
+                DiagnosticsView(diagnosticsVM: container.diagnosticsViewModel)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Schließen") { showingDiagnostics = false }
+                        }
+                    }
+            }
+        }
     }
 
     private var messengerView: some View {
@@ -76,6 +87,14 @@ struct MainWindowView: View {
                     Label("Karte", systemImage: "map")
                 }
                 .help("Karte aller bekannten Nodes anzeigen")
+            }
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingDiagnostics = true
+                } label: {
+                    Label("Diagnose", systemImage: "waveform.path.ecg")
+                }
+                .help("Diagnose-Fenster: RX Log, CLI, Node Status")
             }
         }
     }

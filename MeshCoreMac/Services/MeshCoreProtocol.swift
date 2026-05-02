@@ -30,6 +30,7 @@ enum MeshCoreProtocol {
         case sendChannelTxtMsg  = 0x03  // CMD_SEND_CHANNEL_TXT_MSG
         case getContacts        = 0x04  // CMD_GET_CONTACTS
         case getDeviceTime      = 0x05  // CMD_GET_DEVICE_TIME
+        case tracePath          = 0x07  // CMD_TRACE_PATH — VERIFY: cmd byte unconfirmed
         case syncNextMessage    = 0x0A  // CMD_SYNC_NEXT_MESSAGE
         case getBattAndStorage  = 0x14  // CMD_GET_BATT_AND_STORAGE
         case deviceQuery        = 0x16  // CMD_DEVICE_QUERY (22)
@@ -109,6 +110,12 @@ enum DecodedFrame: Sendable, Equatable {
     case contactsStart
     /// Endsignal der GET_CONTACTS-Antwort (END_OF_CONTACTS 0x04).
     case contactsEnd
+    /// Batterie-Ladezustand und Speicherinfo (RESP_BATT_AND_STORAGE 0x0C).
+    /// Format: [battery_pct:1][storage_used_le32:4][storage_free_le32:4] — VERIFY
+    case battAndStorage(battery: Int, storageUsed: Int, storageFree: Int)
+    /// RF-Status (PUSH_STATUS_RESPONSE 0x87): RSSI und Noise Floor in dBm.
+    /// Format: [rssi_i8:1][noise_i8:1] — VERIFY
+    case noiseFloor(rssi: Int, noise: Int)
 }
 
 // MARK: - Fehler
@@ -146,6 +153,10 @@ extension DecodedFrame {
             return "CONTACTS_START"
         case .contactsEnd:
             return "CONTACTS_END"
+        case .battAndStorage(let batt, let used, let free):
+            return "BATT_STORAGE batt=\(batt)% used=\(used)B free=\(free)B"
+        case .noiseFloor(let rssi, let noise):
+            return "STATUS rssi=\(rssi)dBm noise=\(noise)dBm"
         }
     }
 }

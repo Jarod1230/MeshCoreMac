@@ -275,7 +275,8 @@ extension MeshCoreBluetoothService: @preconcurrency CBPeripheralDelegate {
 
         if let decoded {
             switch decoded {
-            case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd:
+            case .selfInfo, .nodeAdvert, .contact, .contactsStart, .contactsEnd,
+                 .battAndStorage, .noiseFloor:
                 nodeEventContinuation.yield(decoded)
             case .newChannelMessage, .newDirectMessage, .messageAck:
                 break

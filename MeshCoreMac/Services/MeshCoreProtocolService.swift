@@ -28,6 +28,24 @@ enum MeshCoreProtocolService {
         Data([MeshCoreProtocol.Command.getContacts.rawValue])
     }
 
+    /// Kodiert CMD_TRACE_PATH (0x07) mit 4-Byte Contact-ID-Präfix.
+    /// VERIFY: Byte 0x07 und Format gegen reale Firmware bestätigen.
+    static func encodeTracePath(contactId: String) -> Data {
+        var bytes: [UInt8] = [MeshCoreProtocol.Command.tracePath.rawValue]
+        let idBytes = stride(from: 0, to: min(contactId.count, 8), by: 2).compactMap {
+            let start = contactId.index(contactId.startIndex, offsetBy: $0)
+            let end = contactId.index(start, offsetBy: 2, limitedBy: contactId.endIndex) ?? contactId.endIndex
+            return UInt8(contactId[start..<end], radix: 16)
+        }
+        bytes.append(contentsOf: idBytes.prefix(4))
+        while bytes.count < 5 { bytes.append(0x00) }
+        return Data(bytes)
+    }
+
+    static func encodeBattAndStorage() -> Data {
+        Data([MeshCoreProtocol.Command.getBattAndStorage.rawValue])
+    }
+
     static func encodeSendTextMessage(
         text: String,
         channelIndex: UInt8,
@@ -70,7 +88,9 @@ enum MeshCoreProtocolService {
                 return try decodeContact(payload)
             case .endOfContacts:
                 return .contactsEnd
-            case .ok, .err, .currTime, .noMoreMessages, .battAndStorage:
+            case .battAndStorage:
+                return try decodeBattAndStorage(payload)
+            case .ok, .err, .currTime, .noMoreMessages:
                 throw ProtocolError.unknownCommand(commandByte)
             }
         }
@@ -81,7 +101,9 @@ enum MeshCoreProtocolService {
                 return try decodeMsgAck(payload)
             case .advert, .pathUpdated:
                 return try decodeNodeAdvertPush(payload)
-            case .msgWaiting, .rawData, .loginSuccess, .loginFail, .statusResponse:
+            case .statusResponse:
+                return try decodeStatusResponse(payload)
+            case .msgWaiting, .rawData, .loginSuccess, .loginFail:
                 throw ProtocolError.unknownCommand(commandByte)
             }
         }
@@ -235,5 +257,32 @@ enum MeshCoreProtocolService {
             | UInt32(bytes[offset + 2]) << 16
             | UInt32(bytes[offset + 3]) << 24
         return Float(bitPattern: bits)
+    }
+
+    /// Dekodiert RESP_BATT_AND_STORAGE (0x0C).
+    /// Format (VERIFY): [battery_pct:1][storage_used_le32:4][storage_free_le32:4]
+    private static func decodeBattAndStorage(_ payload: Data) throws -> DecodedFrame {
+        let bytes = Array(payload)
+        guard bytes.count >= 9 else {
+            throw ProtocolError.invalidPayload("BATT_AND_STORAGE zu kurz")
+        }
+        let battery = Int(bytes[0])
+        let used = Int(UInt32(bytes[1]) | UInt32(bytes[2]) << 8 |
+                       UInt32(bytes[3]) << 16 | UInt32(bytes[4]) << 24)
+        let free = Int(UInt32(bytes[5]) | UInt32(bytes[6]) << 8 |
+                       UInt32(bytes[7]) << 16 | UInt32(bytes[8]) << 24)
+        return .battAndStorage(battery: battery, storageUsed: used, storageFree: free)
+    }
+
+    /// Dekodiert PUSH_STATUS_RESPONSE (0x87).
+    /// Format (VERIFY): [rssi_signed:1][noise_signed:1]
+    private static func decodeStatusResponse(_ payload: Data) throws -> DecodedFrame {
+        let bytes = Array(payload)
+        guard bytes.count >= 2 else {
+            throw ProtocolError.invalidPayload("STATUS_RESPONSE zu kurz")
+        }
+        let rssi = Int(Int8(bitPattern: bytes[0]))
+        let noise = Int(Int8(bitPattern: bytes[1]))
+        return .noiseFloor(rssi: rssi, noise: noise)
     }
 }

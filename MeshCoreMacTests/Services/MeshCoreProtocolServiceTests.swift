@@ -41,7 +41,7 @@ final class MeshCoreProtocolServiceTests: XCTestCase {
     func testDecodeNewMessage_parsesCorrectly() throws {
         // Synthetischer NEW_MSG-Frame: [CMD][channelIdx][hops][snr_raw][utf8_text]
         var frameBytes: [UInt8] = [
-            MeshCoreProtocol.Response.newMsg.rawValue,
+            MeshCoreProtocol.Response.channelMsgRecv.rawValue,
             0x00,   // channelIndex = 0
             0x02,   // hops = 2
             0xF8,   // snr raw byte (signed: -8)

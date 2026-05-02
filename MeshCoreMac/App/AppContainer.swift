@@ -3,7 +3,7 @@ import Foundation
 
 @MainActor
 final class AppContainer {
-    let bluetoothService: MeshCoreBluetoothService
+    let bluetoothService: any BluetoothServiceProtocol
     let messageStore: MessageStore
     let contactStore: ContactStore
     let connectionViewModel: ConnectionViewModel

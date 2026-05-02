@@ -2,18 +2,18 @@
 import Foundation
 import Observation
 
-enum CLIError: Error, LocalizedError {
-    case invalidHex(String)
-    var errorDescription: String? {
-        switch self {
-        case .invalidHex(let s): return "Ungültige Hex-Eingabe: '\(s)'"
-        }
-    }
-}
-
 @MainActor
 @Observable
 final class DiagnosticsViewModel {
+
+    enum CLIError: Error, LocalizedError {
+        case invalidHex(String)
+        var errorDescription: String? {
+            switch self {
+            case .invalidHex(let s): return "Ungültige Hex-Eingabe: '\(s)'"
+            }
+        }
+    }
 
     private(set) var logEntries: [RxLogEntry] = []
     private(set) var batteryPercent: Int? = nil

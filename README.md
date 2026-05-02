@@ -1,6 +1,6 @@
 # MeshCoreMac
 
-Native macOS-App zur Kommunikation über das [MeshCore](https://github.com/ripplebiz/MeshCore) Off-Grid-Mesh-Netzwerk. Verbindet sich per Bluetooth Low Energy (BLE) mit einem MeshCore-Node und bietet einen vollständigen Messenger mit Kanal- und Direktnachrichten.
+Native macOS-App zur Kommunikation über das [MeshCore](https://github.com/ripplebiz/MeshCore) Off-Grid-Mesh-Netzwerk. Verbindet sich per Bluetooth Low Energy (BLE) mit einem MeshCore-Node und bietet einen vollständigen Messenger mit Kanal- und Direktnachrichten, einer Kontaktkarte und Netzwerk-Diagnosewerkzeugen.
 
 Privacy-first: keine Telemetrie, kein Cloud-Sync, alle Daten lokal.
 
@@ -28,7 +28,7 @@ Dann in Xcode: **Run** (⌘R).
 
 ---
 
-## Features (Phase 1)
+## Features
 
 ### Verbindung
 - **BLE-Verbindung** zu einem MeshCore-Node (Nordic UART Service)
@@ -42,6 +42,17 @@ Dann in Xcode: **Run** (⌘R).
 - **Zustellstatus**: Wird gesendet → Gesendet → Zugestellt ✓
 - Zeichenlimit: 133 Bytes (MeshCore-Protokollgrenze) mit Live-Zähler
 - Senden per Klick oder ⌘↩
+
+### Kontakte & Karte
+- **Kontaktliste** aus dem Mesh: live aktualisiert via `ADVERT`- und `GET_CONTACTS`-Frames
+- **Kontakt-Detail-Sheet**: Name bearbeiten, Online-Status, letzte Aktivität, GPS-Position
+- **Node-Karte**: zeigt alle Nodes mit bekannter GPS-Position auf einer Kartenansicht
+- Offline-persistente Kontakte (SQLite) — bleiben über Neustarts erhalten
+
+### Netzwerk-Diagnose
+- **RX Log**: Live-Anzeige aller BLE-Frames (eingehend ↓ und ausgehend ↑) mit Zeitstempel, Hex-Dump und dekodiertem Frame-Typ; automatischer Scroll, max. 200 Einträge
+- **CLI**: Rohe Hex-Bytes direkt an den Node senden; Schnellbefehle für häufige Commands (GET_CONTACTS, DEVICE_QUERY, BATT_STORAGE, APP_START); Befehlsverlauf mit Tap-to-reuse
+- **Node Status**: Batterie-Ladestand (%), belegter und freier Speicher, RSSI und Noise Floor in dBm
 
 ### System-Integration
 - **Menüleisten-App**: läuft im Hintergrund ohne Dock-Icon, öffnet Fenster bei Bedarf
@@ -57,21 +68,29 @@ Dann in Xcode: **Run** (⌘R).
 - Verbindungsfehler → Banner mit Retry-Button
 - Sendefehler → Badge „Nicht zugestellt ⚠️"
 - Fehlende Bluetooth-Berechtigung → erklärender Dialog
+- CLI-Fehler → Inline-Fehlermeldung
 
 ---
 
 ## Architektur
 
 ```
-┌─────────────────────────────────┐
-│         SwiftUI Views           │
-├─────────────────────────────────┤
-│      @Observable ViewModels     │
-├─────────────────────────────────┤
-│   MeshCoreBluetoothService      │  CoreBluetooth, @MainActor
-│   MeshCoreProtocolService       │  Frame-Encode/Decode
-│   MessageStore                  │  SQLite via GRDB
-└─────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│                  SwiftUI Views               │
+│  MainWindow · Map · Diagnostics · Settings   │
+├──────────────────────────────────────────────┤
+│             @Observable ViewModels           │
+│  Connection · Sidebar · Chat · Contacts      │
+│  Diagnostics                                 │
+├──────────────────────────────────────────────┤
+│           MeshCoreBluetoothService           │  CoreBluetooth, @MainActor
+│  incomingFrames ──────────────► ChatVM       │
+│  nodeEventStream ─────────────► ContactsVM  │
+│  rxLogStream ─────────────────► DiagnosticsVM│
+├──────────────────────────────────────────────┤
+│           MeshCoreProtocolService            │  Frame-Encode/Decode
+│           MessageStore · ContactStore        │  SQLite via GRDB
+└──────────────────────────────────────────────┘
 ```
 
 **Tech-Stack:**
@@ -87,16 +106,29 @@ Dann in Xcode: **Run** (⌘R).
 ```
 MeshCoreMac/
 ├── App/                    # Entry Point, AppDelegate, AppContainer, NotificationService
-├── Models/                 # ConnectionState, MeshMessage, MeshChannel, MeshContact
-├── Services/               # BLE-Service, Protocol-Parser, MessageStore
-├── ViewModels/             # ConnectionViewModel, SidebarViewModel, ChatViewModel
+├── Models/                 # ConnectionState, MeshMessage, MeshChannel, MeshContact, RxLogEntry
+├── Services/               # BLE-Service, Protocol-Parser, MessageStore, ContactStore
+├── ViewModels/             # ConnectionViewModel, SidebarViewModel, ChatViewModel,
+│                           # ContactsViewModel, DiagnosticsViewModel
 └── Views/
     ├── MainWindow/         # MainWindowView, SidebarView, ChatView, MessageBubbleView
+    ├── Map/                # NodeMapView
+    ├── Diagnostics/        # DiagnosticsView, RxLogView, CLIView, NodeStatusView
     ├── MenuBar/            # MenuBarView
     ├── Onboarding/         # PairingView
     ├── Settings/           # SettingsView (Backup/Restore)
-    └── Shared/             # ErrorBannerView
+    └── Shared/             # ErrorBannerView, ContactDetailView
 ```
+
+### Stream-Fan-out
+
+`MeshCoreBluetoothService` multiplext eingehende BLE-Frames in drei unabhängige `AsyncStream`s — jeder mit genau einem Consumer:
+
+| Stream | Consumer | Inhalt |
+|---|---|---|
+| `incomingFrames` | `ChatViewModel` | Rohe `Data`-Frames für Nachrichten |
+| `nodeEventStream` | `ContactsViewModel` | Dekodierte Node-Ereignisse (ADVERT, CONTACT, …) |
+| `rxLogStream` | `DiagnosticsViewModel` | Alle Frames (ein- & ausgehend) als `RxLogEntry` |
 
 ### MeshCore-Protokoll (Companion-Modus)
 
@@ -104,11 +136,22 @@ Die App kommuniziert über das Nordic UART Service (NUS) BLE-Profil:
 
 | UUID | Funktion |
 |---|---|
-| `6E400001-...` | Service UUID |
-| `6E400002-...` | TX Characteristic (App → Node) |
-| `6E400003-...` | RX Characteristic (Node → App, Notify) |
+| `6E400001-…` | Service UUID |
+| `6E400002-…` | TX Characteristic (App → Node) |
+| `6E400003-…` | RX Characteristic (Node → App, Notify) |
 
-Beim Verbindungsaufbau sendet die App automatisch `APP_START` (0x01) und `DEVICE_QUERY` (0x16).
+Beim Verbindungsaufbau sendet die App automatisch `APP_START` (0x01), `DEVICE_QUERY` (0x16) und `GET_CONTACTS` (0x04).
+
+Unterstützte Response-Codes:
+
+| Code | Name | Verarbeitung |
+|---|---|---|
+| `0x05` / `0x0D` | SELF_INFO / DEVICE_INFO | Eigene Node-ID, Position, Firmware |
+| `0x02–0x04` | CONTACTS_START/CONTACT/END | Kontaktliste |
+| `0x07` / `0x08` | CONTACT_MSG / CHANNEL_MSG | Direktnachrichten / Kanalnachrichten |
+| `0x0C` | BATT_AND_STORAGE | Batterie %, Speicher belegt/frei |
+| `0x80` / `0x81` | ADVERT / PATH_UPDATED | Node-Ankündigungen mit Position |
+| `0x87` | STATUS_RESPONSE | RSSI + Noise Floor |
 
 ---
 
@@ -120,16 +163,18 @@ xcodebuild test -project MeshCoreMac.xcodeproj -scheme MeshCoreMac \
   -destination 'platform=macOS'
 ```
 
-25 Tests in 6 Test-Suiten:
+59 Tests in 8 Test-Suiten:
 
 | Suite | Tests |
 |---|---|
-| `ConnectionViewModelTests` | 3 |
-| `ChatViewModelTests` | 4 |
-| `MeshCoreProtocolServiceTests` | 6 |
+| `ConnectionViewModelTests` | 4 |
+| `ChatViewModelTests` | 6 |
+| `ContactsViewModelTests` | 9 |
+| `DiagnosticsViewModelTests` | 10 |
+| `MeshCoreProtocolServiceTests` | 15 |
 | `MeshMessageTests` | 6 |
-| `MessageStoreTests` | 6 |
-| `MeshCoreMacTests` | Sanity-Check |
+| `MessageStoreTests` | 5 |
+| `MeshCoreMacTests` | 1 (Sanity) |
 
 ---
 
@@ -138,16 +183,9 @@ xcodebuild test -project MeshCoreMac.xcodeproj -scheme MeshCoreMac \
 | Phase | Inhalt | Status |
 |---|---|---|
 | **1** | BLE-Verbindung + Messenger | **Abgeschlossen** |
-| 2 | Kontakte & Karte | Geplant |
-| 3 | Netzwerk-Tools (RX Log, Trace Path, Noise Floor, CLI) | Geplant |
+| **2** | Kontakte & Karte | **Abgeschlossen** |
+| **3** | Netzwerk-Tools (RX Log, CLI, Noise Floor, Batterie) | **Abgeschlossen** |
 | 4 | Node-Konfiguration & Remote-Admin | Geplant |
-
-### Bekannte Grenzen (Phase 1)
-
-- Kein USB/Serial-Anschluss (nur BLE)
-- Nur ein Node gleichzeitig
-- "Diagnose / Event-Log" in der Menüleiste ist noch nicht implementiert (Phase 3)
-- Node-Positionen und Karte fehlen (Phase 2)
 
 ---
 

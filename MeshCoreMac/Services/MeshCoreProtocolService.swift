@@ -3,10 +3,11 @@
 // Encode/Decode für das MeshCore Companion-BLE-Protokoll.
 // Quelle: https://docs.meshcore.io/companion_protocol/
 //
-// Frame-Formate:
-//   SELF_INFO/ADVERT payload: [pubkey:32][ts:4][lat_f32_le:4][lon_f32_le:4][alt_f32_le:4][name:variable]
-//   CONTACT payload:          [pubkey:32][last_heard:4][flags:1][name:variable]
-// VERIFY: Bei neuer Firmware-Version gegen reale Frames abgleichen.
+// Bekannte Decode-Abweichungen von der Spec (Phase 4 Fix):
+//   SELF_INFO (0x05): Name ab Byte 58, lat/lon int32÷1e6 — aktuell float32 ab Byte 36
+//   ADVERT  (0x80):  lat/lon in Appdata ab Byte 100 mit Flags — aktuell float32 ab Byte 36
+//   BATTERY  (0x0C): voltage_mV (uint16) + used_kb + total_kb — aktuell pct + used_B + free_B
+//   CH_MSG   (0x08): hat kein SNR-Feld; [ch][path_len][txt_type][ts:4][msg] — aktuell [ch][hops][snr][msg]
 
 import Foundation
 
@@ -14,22 +15,47 @@ enum MeshCoreProtocolService {
 
     // MARK: - Encoder
 
+    /// CMD_APP_START: [0x01][reserved×7][app_name UTF-8]
     static func encodeAppStart() -> Data {
-        // VERIFY: Minimal-Frame. Echtes Spec-Format: [0x01][app_ver][reserved×6][app_name UTF-8].
-        Data([MeshCoreProtocol.Command.appStart.rawValue])
+        var frame = Data([MeshCoreProtocol.Command.appStart.rawValue])
+        frame.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        frame.append(contentsOf: "MeshCoreMac".utf8)
+        return frame
     }
 
+    /// CMD_DEVICE_QUERY: Spec zeigt [0x16][0x03] — VERIFY mit echter Hardware.
     static func encodeDeviceQuery() -> Data {
-        // VERIFY: Minimal-Frame. Echtes Spec-Format: [0x16][app_target_ver].
-        Data([MeshCoreProtocol.Command.deviceQuery.rawValue])
+        Data([MeshCoreProtocol.Command.deviceQuery.rawValue, 0x03])
     }
 
     static func encodeGetContacts() -> Data {
         Data([MeshCoreProtocol.Command.getContacts.rawValue])
     }
 
-    /// Kodiert CMD_TRACE_PATH (0x07) mit 4-Byte Contact-ID-Präfix.
-    /// VERIFY: Byte 0x07 und Format gegen reale Firmware bestätigen.
+    static func encodeGetMessage() -> Data {
+        Data([MeshCoreProtocol.Command.getMessage.rawValue])
+    }
+
+    /// CMD_GET_CHANNEL_INFO: [0x1F][ch_idx:1]
+    static func encodeGetChannelInfo(index: UInt8) -> Data {
+        Data([MeshCoreProtocol.Command.getChannelInfo.rawValue, index])
+    }
+
+    /// CMD_SET_CHANNEL: [0x20][ch_idx:1][name:32 null-padded][secret:16]
+    static func encodeSetChannel(index: UInt8, name: String, secret: Data = Data(repeating: 0, count: 16)) -> Data {
+        var frame = Data([MeshCoreProtocol.Command.setChannel.rawValue, index])
+        var nameBytes = Array(name.utf8.prefix(MeshCoreProtocol.maxChannelNameLength))
+        while nameBytes.count < MeshCoreProtocol.maxChannelNameLength { nameBytes.append(0x00) }
+        frame.append(contentsOf: nameBytes)
+        let secretBytes = secret.prefix(MeshCoreProtocol.channelSecretLength)
+        frame.append(contentsOf: secretBytes)
+        while frame.count < 2 + MeshCoreProtocol.maxChannelNameLength + MeshCoreProtocol.channelSecretLength {
+            frame.append(0x00)
+        }
+        return frame
+    }
+
+    /// CMD_TRACE_PATH: VERIFY Byte-Wert und Format.
     static func encodeTracePath(contactId: String) -> Data {
         var bytes: [UInt8] = [MeshCoreProtocol.Command.tracePath.rawValue]
         let idBytes = stride(from: 0, to: min(contactId.count, 8), by: 2).compactMap {
@@ -46,6 +72,8 @@ enum MeshCoreProtocolService {
         Data([MeshCoreProtocol.Command.getBattAndStorage.rawValue])
     }
 
+    /// VERIFY: Echtes CMD_SEND_CHANNEL_TXT_MSG (0x03): [0x03][0x00][ch_idx][ts:4][msg].
+    /// DM (0x02) benötigt 6-Byte-Pubkey-Prefix. Beides in Phase 4 korrigieren.
     static func encodeSendTextMessage(
         text: String,
         channelIndex: UInt8,
@@ -57,8 +85,6 @@ enum MeshCoreProtocolService {
         guard textData.count <= MeshCoreProtocol.maxMessageLength else {
             throw ProtocolError.messageTooLong(textData.count)
         }
-        // VERIFY: Echtes CMD_SEND_CHANNEL_TXT_MSG (0x03) enthält zusätzlich Timestamp und 0x00-Padding.
-        // DM-Format benötigt 6-Byte pubkey-Prefix für Recipient-Adressierung (Phase 2+).
         var frame = Data([MeshCoreProtocol.Command.sendTxtMsg.rawValue, channelIndex])
         frame.append(textData)
         return frame
@@ -90,6 +116,8 @@ enum MeshCoreProtocolService {
                 return .contactsEnd
             case .battAndStorage:
                 return try decodeBattAndStorage(payload)
+            case .channelInfo:
+                return try decodeChannelInfo(payload)
             case .ok, .err, .currTime, .noMoreMessages:
                 throw ProtocolError.unknownCommand(commandByte)
             }
@@ -113,8 +141,9 @@ enum MeshCoreProtocolService {
 
     // MARK: - Private Decode Helpers
 
-    /// Dekodiert SELF_INFO (0x05) und DEVICE_INFO (0x0D) Responses.
-    /// Format: [pubkey:32][ts:4][lat_f32_le:4][lon_f32_le:4][alt_f32_le:4][name:variable]
+    /// Dekodiert SELF_INFO (0x05) und DEVICE_INFO (0x0D).
+    /// PHASE4: Aktuell wird DEVICE_INFO (0x0D) identisch zu SELF_INFO behandelt — falsch.
+    /// PHASE4: lat/lon sind int32÷1e6 bei Offset 36–43, Name ab Byte 58 (nicht 48).
     private static func decodeNodeInfo(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 4 else {
@@ -135,13 +164,13 @@ enum MeshCoreProtocolService {
                 firmware: firmware
             )
         }
-        // Fallback für kurze Frames ohne Positions-Payload
         let firmware = String(data: Data(bytes.dropFirst(4)), encoding: .utf8) ?? "unbekannt"
         return .selfInfo(nodeId: nodeId, lat: nil, lon: nil, firmware: firmware)
     }
 
-    /// Dekodiert ADVERT (0x80) und PATH_UPDATED (0x81) Push-Notifications.
-    /// Format: [pubkey:32][ts:4][lat_f32_le:4][lon_f32_le:4][alt_f32_le:4][name:variable]
+    /// Dekodiert ADVERT (0x80) und PATH_UPDATED (0x81).
+    /// PHASE4: Echter Aufbau: [pubkey:32][ts:4][signature:64][appdata mit Flags ab Byte 100].
+    /// Aktuell wird float32 bei Offset 36–43 gelesen (falsch für echte Frames).
     private static func decodeNodeAdvertPush(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 4 else {
@@ -165,8 +194,7 @@ enum MeshCoreProtocolService {
         return .nodeAdvert(contactId: contactId, name: nil, lat: nil, lon: nil)
     }
 
-    /// Dekodiert einen einzelnen CONTACT (0x03) aus der GET_CONTACTS-Sequenz.
-    /// Format: [pubkey:32][last_heard:4][flags:1][name:variable]
+    /// Dekodiert CONTACT (0x03): [pubkey:32][last_heard:4][flags:1][name:variable]
     private static func decodeContact(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 37 else {
@@ -192,6 +220,9 @@ enum MeshCoreProtocolService {
         ))
     }
 
+    /// Dekodiert CHANNEL_MSG_RECV (0x08).
+    /// PHASE4: Spec-Format: [ch_idx:1][path_len:1][txt_type:1][ts:4][msg].
+    /// Aktuell: [ch_idx:1][hops:1][snr:1][msg] — kein Timestamp, SNR-Byte ist txt_type.
     private static func decodeChannelMessage(_ payload: Data) throws -> DecodedFrame {
         guard payload.count >= 3 else {
             throw ProtocolError.invalidPayload("CHANNEL_MSG payload zu kurz")
@@ -217,6 +248,9 @@ enum MeshCoreProtocolService {
         return .newChannelMessage(msg)
     }
 
+    /// Dekodiert CONTACT_MSG_RECV (0x07).
+    /// PHASE4: Spec-Format: [pubkey_prefix:6][path_len:1][txt_type:1][ts:4][msg].
+    /// Aktuell: [contact_id:4][hops:1][snr:1][msg].
     private static func decodeContactMessage(_ payload: Data) throws -> DecodedFrame {
         guard payload.count >= 6 else {
             throw ProtocolError.invalidPayload("CONTACT_MSG payload zu kurz")
@@ -247,20 +281,9 @@ enum MeshCoreProtocolService {
         return .messageAck(messageId: msgId)
     }
 
-    // MARK: - Byte Helpers
-
-    /// Liest Float32 little-endian aus einem Byte-Array ab `offset`.
-    private static func readFloat32LE(_ bytes: [UInt8], offset: Int) -> Float? {
-        guard offset + 3 < bytes.count else { return nil }
-        let bits = UInt32(bytes[offset])
-            | UInt32(bytes[offset + 1]) << 8
-            | UInt32(bytes[offset + 2]) << 16
-            | UInt32(bytes[offset + 3]) << 24
-        return Float(bitPattern: bits)
-    }
-
-    /// Dekodiert RESP_BATT_AND_STORAGE (0x0C).
-    /// Format (VERIFY): [battery_pct:1][storage_used_le32:4][storage_free_le32:4]
+    /// Dekodiert PACKET_BATTERY (0x0C).
+    /// PHASE4: Spec: [voltage_mv:2 LE][used_kb:4 LE][total_kb:4 LE].
+    /// Aktuell: [batt_pct:1][used_b:4 LE][free_b:4 LE] — falsch.
     private static func decodeBattAndStorage(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 9 else {
@@ -274,8 +297,7 @@ enum MeshCoreProtocolService {
         return .battAndStorage(battery: battery, storageUsed: used, storageFree: free)
     }
 
-    /// Dekodiert PUSH_STATUS_RESPONSE (0x87).
-    /// Format (VERIFY): [rssi_signed:1][noise_signed:1]
+    /// Dekodiert PUSH_STATUS_RESPONSE (0x87): [rssi_i8:1][noise_i8:1].
     private static func decodeStatusResponse(_ payload: Data) throws -> DecodedFrame {
         let bytes = Array(payload)
         guard bytes.count >= 2 else {
@@ -284,5 +306,30 @@ enum MeshCoreProtocolService {
         let rssi = Int(Int8(bitPattern: bytes[0]))
         let noise = Int(Int8(bitPattern: bytes[1]))
         return .noiseFloor(rssi: rssi, noise: noise)
+    }
+
+    /// Dekodiert PACKET_CHANNEL_INFO (0x12): [ch_idx:1][name:32][secret:16]
+    private static func decodeChannelInfo(_ payload: Data) throws -> DecodedFrame {
+        let bytes = Array(payload)
+        guard bytes.count >= 49 else {
+            throw ProtocolError.invalidPayload("CHANNEL_INFO payload zu kurz")
+        }
+        let index = Int(bytes[0])
+        let nameBytes = Data(bytes[1...32])
+        let nameEnd = nameBytes.firstIndex(of: 0) ?? nameBytes.endIndex
+        let name = String(data: nameBytes[nameBytes.startIndex..<nameEnd], encoding: .utf8) ?? ""
+        let secret = Data(bytes[33..<49])
+        return .channelInfo(index: index, name: name, secret: secret)
+    }
+
+    // MARK: - Byte Helpers
+
+    private static func readFloat32LE(_ bytes: [UInt8], offset: Int) -> Float? {
+        guard offset + 3 < bytes.count else { return nil }
+        let bits = UInt32(bytes[offset])
+            | UInt32(bytes[offset + 1]) << 8
+            | UInt32(bytes[offset + 2]) << 16
+            | UInt32(bytes[offset + 3]) << 24
+        return Float(bitPattern: bits)
     }
 }

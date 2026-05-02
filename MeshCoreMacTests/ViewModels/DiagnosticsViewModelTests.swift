@@ -59,7 +59,7 @@ final class DiagnosticsViewModelTests: XCTestCase {
         do {
             try await vm.sendCLICommand()
             XCTFail("Hätte CLIError werfen sollen")
-        } catch CLIError.invalidHex(let token) {
+        } catch DiagnosticsViewModel.CLIError.invalidHex(let token) {
             XCTAssertEqual(token, "ZZ")
         }
     }

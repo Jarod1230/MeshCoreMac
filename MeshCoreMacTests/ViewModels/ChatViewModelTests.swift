@@ -47,7 +47,7 @@ final class ChatViewModelTests: XCTestCase {
     func testIncomingFrame_appearsInMessages() async throws {
         await vm.loadMessages()
         var frameBytes: [UInt8] = [
-            MeshCoreProtocol.Response.newMsg.rawValue,
+            MeshCoreProtocol.Response.channelMsgRecv.rawValue,
             0x00, 0x01, 0xF8
         ]
         frameBytes += Array("Incoming".utf8)
